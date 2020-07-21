@@ -1,6 +1,6 @@
 # Platform for Situated Intelligence Samples
 
-This repository contains a few small example applications written with Platform for Situated Intelligence. Some of the samples address specialized topics like how to leverage speech recognition components or how to bridge to ROS, but in general looking through them can give you more insight into programming with Platform for Situated Intelligence. Besides these samples, a good place to start reading about programming with \\psi is the [Brief Introduction](https://github.com/microsoft/psi/wiki/Brief-Introduction) tutorial. 
+This repository contains a few small example applications written with [Platform for Situated Intelligence](https://github.com/microsoft/psi). Some of the samples address specialized topics like how to leverage speech recognition components or how to bridge to ROS, but in general looking through them can give you more insight into programming with Platform for Situated Intelligence. Besides these samples, a good place to start reading about programming with \\psi is the [Brief Introduction](https://github.com/microsoft/psi/wiki/Brief-Introduction) tutorial. 
 
 
 | Name | Description | Windows | Linux |
