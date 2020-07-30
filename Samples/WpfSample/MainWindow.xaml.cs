@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#pragma warning disable SA1118 // Parameter must not span multiple lines
-
 namespace Microsoft.Psi.Samples.WpfSample
 {
     using System;
@@ -97,5 +95,3 @@ namespace Microsoft.Psi.Samples.WpfSample
         }
     }
 }
-
-#pragma warning restore SA1118 // Parameter must not span multiple lines

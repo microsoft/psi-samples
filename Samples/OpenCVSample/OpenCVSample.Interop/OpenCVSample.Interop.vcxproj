@@ -93,11 +93,10 @@
       <AdditionalDependencies>"$(OpenCVLibs)";kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
+      <AssemblyLinkResource>$(OpenCVDlls)</AssemblyLinkResource>
     </Link>
     <PostBuildEvent>
-      <Command>if not exist $(OutDir)..\..\..\OpenCVSample\bin\Debug (mkdir $(OutDir)..\..\..\OpenCVSample\bin\Debug)
-copy $(OutDir)$(TargetName)$(TargetExt) $(OutDir)..\..\..\OpenCVSample\bin\Debug\$(TargetName)$(TargetExt)
-copy $(OpenCVDlls) $(OutDir)..\..\..\OpenCVSample\bin\Debug</Command>
+      <Command>copy $(OpenCVDlls) $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -115,14 +114,13 @@ copy $(OpenCVDlls) $(OutDir)..\..\..\OpenCVSample\bin\Debug</Command>
       <AdditionalDependencies>"$(OpenCVLibs)";kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
+      <AssemblyLinkResource>$(OpenCVDlls)</AssemblyLinkResource>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PostBuildEvent>
-      <Command>if not exist $(OutDir)..\..\..\OpenCVSample\bin\Release (mkdir $(OutDir)..\..\..\OpenCVSample\bin\Release)
-copy $(OutDir)$(TargetName)$(TargetExt) $(OutDir)..\..\..\OpenCVSample\bin\Release\$(TargetName)$(TargetExt)
-copy $(OpenCVDlls) $(OutDir)..\..\..\OpenCVSample\bin\Release</Command>
+      <Command>copy $(OpenCVDlls) $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

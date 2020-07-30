@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 #pragma warning disable SA1649 // SA1649FileNameMustMatchTypeName
-#pragma warning disable SA1402 // SA1402MustContainSingleType
 
 namespace Microsoft.Psi.Samples.OpenCV
 {
@@ -165,4 +164,3 @@ namespace Microsoft.Psi.Samples.OpenCV
 }
 
 #pragma warning restore SA1649 // SA1649FileNameMustMatchTypeName
-#pragma warning restore SA1402 // SA1402MustContainSingleType
