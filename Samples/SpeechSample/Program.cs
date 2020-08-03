@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#pragma warning disable SA1118 // Parameter must not span multiple lines
-
 namespace Microsoft.Psi.Samples.SpeechSample
 {
     using System;
@@ -19,7 +17,7 @@ namespace Microsoft.Psi.Samples.SpeechSample
     {
         private const string AppName = "SpeechSample";
 
-        private const string LogPath = @"..\..\..\Data\" + Program.AppName;
+        private const string LogPath = @".\OutputData";
 
         // This field is required if using Azure Speech (option 2 in the sample) and must be a valid key which may
         // be obtained by signing up at https://azure.microsoft.com/en-us/try/cognitive-services/?api=speech-api.
@@ -75,12 +73,12 @@ namespace Microsoft.Psi.Samples.SpeechSample
 
                     case ConsoleKey.D3:
                         // Toggle between using live audio and logged audio as input
-                        inputLogPath = inputLogPath == null ? Program.LogPath : null;
+                        inputLogPath = inputLogPath == null ? LogPath : null;
                         break;
 
                     case ConsoleKey.D4:
                         // Toggle output logging
-                        outputLogPath = outputLogPath == null ? Program.LogPath : null;
+                        outputLogPath = outputLogPath == null ? LogPath : null;
                         break;
 
                     case ConsoleKey.Q:
@@ -109,8 +107,8 @@ namespace Microsoft.Psi.Samples.SpeechSample
                 if (inputLogPath != null)
                 {
                     // Open the MicrophoneAudio stream from the last saved log
-                    var store = Store.Open(pipeline, Program.AppName, inputLogPath);
-                    audioInput = store.OpenStream<AudioBuffer>($"{Program.AppName}.MicrophoneAudio");
+                    var store = Store.Open(pipeline, AppName, inputLogPath);
+                    audioInput = store.OpenStream<AudioBuffer>($"{AppName}.MicrophoneAudio");
                 }
                 else
                 {
@@ -127,7 +125,7 @@ namespace Microsoft.Psi.Samples.SpeechSample
                         Language = "en-US",
                         Grammars = new GrammarInfo[]
                         {
-                                new GrammarInfo() { Name = Program.AppName, FileName = "SampleGrammar.grxml" },
+                                new GrammarInfo() { Name = AppName, FileName = "SampleGrammar.grxml" },
                         },
                     });
 
@@ -152,8 +150,8 @@ namespace Microsoft.Psi.Samples.SpeechSample
                 if (dataStore != null)
                 {
                     // Log the microphone audio and recognition results
-                    audioInput.Write($"{Program.AppName}.MicrophoneAudio", dataStore);
-                    finalResults.Write($"{Program.AppName}.FinalRecognitionResults", dataStore);
+                    audioInput.Write($"{AppName}.MicrophoneAudio", dataStore);
+                    finalResults.Write($"{AppName}.FinalRecognitionResults", dataStore);
                 }
 
                 // Register an event handler to catch pipeline errors
@@ -195,8 +193,8 @@ namespace Microsoft.Psi.Samples.SpeechSample
                 if (inputLogPath != null)
                 {
                     // Open the MicrophoneAudio stream from the last saved log
-                    var store = Store.Open(pipeline, Program.AppName, inputLogPath);
-                    audioInput = store.OpenStream<AudioBuffer>($"{Program.AppName}.MicrophoneAudio");
+                    var store = Store.Open(pipeline, AppName, inputLogPath);
+                    audioInput = store.OpenStream<AudioBuffer>($"{AppName}.MicrophoneAudio");
                 }
                 else
                 {
@@ -210,7 +208,7 @@ namespace Microsoft.Psi.Samples.SpeechSample
                 audioInput.PipeTo(vad);
 
                 // Create Azure speech recognizer component
-                var recognizer = new AzureSpeechRecognizer(pipeline, new AzureSpeechRecognizerConfiguration() { SubscriptionKey = Program.azureSubscriptionKey, Region = Program.azureRegion });
+                var recognizer = new AzureSpeechRecognizer(pipeline, new AzureSpeechRecognizerConfiguration() { SubscriptionKey = azureSubscriptionKey, Region = azureRegion });
 
                 // The input audio to the Azure speech recognizer needs to be annotated with a voice activity flag.
                 // This can be constructed by using the Psi Join() operator to combine the audio and VAD streams.
@@ -234,9 +232,9 @@ namespace Microsoft.Psi.Samples.SpeechSample
                 if (dataStore != null)
                 {
                     // Log the microphone audio and recognition results
-                    audioInput.Write($"{Program.AppName}.MicrophoneAudio", dataStore);
-                    finalResults.Write($"{Program.AppName}.FinalRecognitionResults", dataStore);
-                    vad.Write($"{Program.AppName}.VoiceActivity", dataStore);
+                    audioInput.Write($"{AppName}.MicrophoneAudio", dataStore);
+                    finalResults.Write($"{AppName}.FinalRecognitionResults", dataStore);
+                    vad.Write($"{AppName}.VoiceActivity", dataStore);
                 }
 
                 // Register an event handler to catch pipeline errors
@@ -288,7 +286,7 @@ namespace Microsoft.Psi.Samples.SpeechSample
         {
             // If this is a persisted store, use the application name as the store name. Otherwise, generate
             // a unique temporary name for the volatile store only if we are visualizing live data.
-            string dataStoreName = (outputLogPath != null) ? Program.AppName : null;
+            string dataStoreName = (outputLogPath != null) ? AppName : null;
 
             // Create the store only if it is needed (logging to disk).
             return (dataStoreName != null) ? Store.Create(pipeline, dataStoreName, outputLogPath) : null;
@@ -307,28 +305,26 @@ namespace Microsoft.Psi.Samples.SpeechSample
         {
             Console.WriteLine("A cognitive services Azure Speech subscription key is required to use this. For more info, see 'https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account'");
             Console.Write("Enter subscription key");
-            Console.Write(string.IsNullOrWhiteSpace(Program.azureSubscriptionKey) ? ": " : string.Format(" (current = {0}): ", Program.azureSubscriptionKey));
+            Console.Write(string.IsNullOrWhiteSpace(azureSubscriptionKey) ? ": " : string.Format(" (current = {0}): ", azureSubscriptionKey));
 
             // Read a new key or hit enter to keep using the current one (if any)
             string response = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(response))
             {
-                Program.azureSubscriptionKey = response;
+                azureSubscriptionKey = response;
             }
 
             Console.Write("Enter region");
-            Console.Write(string.IsNullOrWhiteSpace(Program.azureRegion) ? ": " : string.Format(" (current = {0}): ", Program.azureRegion));
+            Console.Write(string.IsNullOrWhiteSpace(azureRegion) ? ": " : string.Format(" (current = {0}): ", azureRegion));
 
             // Read a new key or hit enter to keep using the current one (if any)
             response = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(response))
             {
-                Program.azureRegion = response;
+                azureRegion = response;
             }
 
-            return !string.IsNullOrWhiteSpace(Program.azureSubscriptionKey) && !string.IsNullOrWhiteSpace(Program.azureRegion);
+            return !string.IsNullOrWhiteSpace(azureSubscriptionKey) && !string.IsNullOrWhiteSpace(azureRegion);
         }
     }
 }
-
-#pragma warning restore SA1118 // Parameter must not span multiple lines
