@@ -1,17 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="CheckVariable">
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <AssemblyName>OpenCVSample</AssemblyName>
     <ApplicationIcon />
     <OutputType>WinExe</OutputType>
     <CodeAnalysisRuleSet>../../../Build/Sample.Psi.ruleset</CodeAnalysisRuleSet>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -46,13 +48,16 @@
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
-  <Target Name="OldBuild" DependsOnTargets="$(OldBuildDependsOn)" />
   <Target Name="CheckVariable">
-    <Warning Text="In order to build this sample you must define the environment variable OpenCVDir_V4 to point to your OpenCV SDK installation" ContinueOnError="WarnAndContinue" Condition="'$(OpenCVDir_V4)'==''" />
-    <CallTarget Targets="OldBuild" Condition="'$(OpenCVDir_V4)'!=''" />
+    <Warning Text="In order to build this project you must define the environment variable OpenCVDir_V4 to point to your OpenCV SDK installation" ContinueOnError="WarnAndContinue" Condition="'$(OpenCVDir_V4)'==''" />
+    <CreateProperty Value="" Condition="'$(OpenCVDir_V4)'==''">
+      <Output TaskParameter="Value" PropertyName="BuildDependsOn" />
+    </CreateProperty>
+    <CreateProperty Value="false" Condition="'$(OpenCVDir_V4)'==''">
+      <Output TaskParameter="Value" PropertyName="GeneratePackageOnBuild" />
+    </CreateProperty>
+    <CreateProperty Value="" Condition="'$(OpenCVDir_V4)'==''">
+      <Output TaskParameter="Value" PropertyName="GenerateNuspecDependsOn" />
+    </CreateProperty>
   </Target>
-  <PropertyGroup>
-    <OldBuildDependsOn>$(BuildDependsOn)</OldBuildDependsOn>
-    <BuildDependsOn>CheckVariable</BuildDependsOn>
-  </PropertyGroup>
 </Project>

@@ -45,7 +45,7 @@ namespace Microsoft.Psi.Samples.WpfSample
             this.pipeline.PipelineExceptionNotHandled += this.Pipeline_PipelineException;
 
             // Create our webcam
-            Media.MediaCapture webcam = new Media.MediaCapture(this.pipeline, 1920, 1080, 30, true);
+            Media.MediaCapture webcam = new Media.MediaCapture(this.pipeline, 1920, 1080, 30, false);
 
             // Bind the webcam's output to our display image.
             // The "Do" operator is executed on each sample from the stream (webcam.Out), which are the images coming from the webcam
@@ -55,16 +55,6 @@ namespace Microsoft.Psi.Samples.WpfSample
                     // Update our UI image with the Psi image
                     this.DispImage.UpdateImage(img);
                 });
-            if (webcam.Audio != null)
-            {
-                var player = new Audio.AudioPlayer(
-                    this.pipeline,
-                    new Audio.AudioPlayerConfiguration()
-                    {
-                        InputFormat = Audio.WaveFormat.Create16BitPcm(48000, 2),
-                    });
-                webcam.Audio.PipeTo(player.In);
-            }
 
             // Finally start the pipeline running
             try
