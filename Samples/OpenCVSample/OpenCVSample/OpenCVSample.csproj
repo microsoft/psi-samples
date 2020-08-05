@@ -46,7 +46,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
-  <Target Name="OldBuild" DependsOnTargets="$(OldBuildDependsOn)" />
   <Target Name="CheckVariable">
     <Warning Text="In order to build this project you must define the environment variable OpenCVDir_V4 to point to your OpenCV SDK installation" ContinueOnError="WarnAndContinue" Condition="'$(OpenCVDir_V4)'==''" />
     <CreateProperty Value="" Condition="'$(OpenCVDir_V4)'==''">
