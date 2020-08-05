@@ -30,8 +30,6 @@
     <ApplicationDefinition Include="App.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Psi.Audio" Version="0.12.53.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Audio.Windows" Version="0.12.53.2-beta" />
     <PackageReference Include="Microsoft.Psi.Imaging" Version="0.12.53.2-beta" />
     <PackageReference Include="Microsoft.Psi.Imaging.Windows" Version="0.12.53.2-beta" />
     <PackageReference Include="Microsoft.Psi.Media.Windows.x64" Version="0.12.53.2-beta" />
