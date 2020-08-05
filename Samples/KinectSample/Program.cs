@@ -170,6 +170,7 @@ namespace MultiModalSpeechDetection
                 // Run the pipeline
                 pipeline.RunAsync();
 
+                Console.WriteLine($"Store will be saved to: {store.Path}");
                 Console.WriteLine("Press any key to finish recording");
                 Console.ReadKey();
             }
