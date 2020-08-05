@@ -17,6 +17,10 @@ As indicated in the last column in the table below, some of the samples have a c
 | [OpenCVSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/OpenCVSample) | This sample illustrates how to interop with OpenCV. | Yes | - | - |
 | [WpfSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/WpfSample) | This sample illustrates how to write a Windows Presentation Foundation app that uses Platform for Situated Intelligence. | Yes | - | - |
 
+# Building
+
+To build the samples, you will need to install [Visual Studio 2019](https://visualstudio.microsoft.com/vs/) with the .NET desktop development workload on Windows, or [.NET Core 3.1](https://docs.microsoft.com/en-us/dotnet/core/install/linux) on Linux. Some samples may have additional prerequisites. Please see the README of each individual sample for more information.
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
