@@ -7,7 +7,8 @@ As indicated in the last column in the table below, some of the samples have a c
 
 | Name | Description | Windows | Linux | Walkthrough |
 | :----------- | :---------- | :--: | :--: | :--: |
-| [WebcamWithAudioSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) | This sample illustrates how to get images from a camera and audio from a microphone. | Yes | - | - | 
+| [WebcamWithAudioSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) | This sample illustrates how to get images from a camera and audio from a microphone. | Yes | - | [Yes](https://github.com/Microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) | 
+| [LinuxWebcamWithAudioSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/LinuxWebcamWithAudioSample) | This sample illustrates how to get images from a camera and audio from a microphone on Linux. | - | Yes | [Yes](https://github.com/Microsoft/psi-samples/tree/main/Samples/LinuxWebcamWithAudioSample) | 
 | [AzureKinectSample](https://github.com/microsoft/psi-samples/tree/main/Samples/AzureKinectSample) | This sample demonstrates how to use the Azure Kinect sensor with body tracking and how to use the `Join()` and `Pair()` operators to synchronize and fuse streams. | Yes | - | [Yes](https://github.com/microsoft/psi-samples/tree/main/Samples/AzureKinectSample) |
 | [KinectSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/KinectSample) | This sample illustrates how to augment an existing voice activity detector by leveraging information about lips motion extracted from Kinect face tracking. | Yes | - | - |
 | [SpeechSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/SpeechSample) | This sample illustrates how to use various speech recognition components. | Yes | - | - |
