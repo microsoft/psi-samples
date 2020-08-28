@@ -21,9 +21,11 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainWindow.xml" />
+    <EmbeddedResource Include="Styles.css" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="stylecop.json" />
+    <None Remove="Styles.css" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />

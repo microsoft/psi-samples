@@ -31,7 +31,6 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
             : base("Webcam with Audio Sample")
         {
             // create the window widgets from the MainWindow.xml resource using the builder
-            var names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
             using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Microsoft.Psi.Samples.LinuxWebcamWithAudioSample.MainWindow.xml");
             using StreamReader reader = new StreamReader(stream);
             var builder = new Gtk.Builder();
