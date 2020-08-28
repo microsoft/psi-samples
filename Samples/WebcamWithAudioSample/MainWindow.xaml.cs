@@ -57,7 +57,7 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
 
                     this.DrawAudioLevel(image, audioLevel);
 
-                    // Update the window image with the Psi image
+                    // Update the window image with the latest frame
                     this.Dispatcher.Invoke(() => this.displayImage.UpdateImage(image));
                 },
                 DeliveryPolicy.LatestMessage);

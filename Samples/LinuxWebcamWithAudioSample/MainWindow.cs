@@ -54,7 +54,7 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
             this.pipeline = Pipeline.Create();
 
             // Create the webcam component
-            var webcam = new MediaCapture(this.pipeline, 640, 480, "/dev/video2", PixelFormatId.YUYV);
+            var webcam = new MediaCapture(this.pipeline, 640, 480, "/dev/video0", PixelFormatId.YUYV);
 
             // Create the audio capture component
             var audio = new AudioCapture(this.pipeline, new AudioCaptureConfiguration { Format = WaveFormat.Create16kHz1Channel16BitPcm() });
@@ -71,14 +71,8 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
             webcamWithAudioEnergy.Do(
                 frame =>
                 {
-                    var image = frame.Item1;
-                    var audioLevel = frame.Item2;
-
-                    this.DrawImageAndAudioLevel(image, audioLevel);
-
-                    // Update the window with the latest image
-                    var pixbuf = this.ImageToPixbuf(image);
-                    Gtk.Application.Invoke((sender, e) => { this.displayImage.Pixbuf = pixbuf; });
+                    // Update the window with the latest frame
+                    this.DrawFrame(frame);
                 },
                 DeliveryPolicy.LatestMessage);
 
@@ -86,9 +80,13 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
             this.pipeline.RunAsync();
         }
 
-        private void DrawImageAndAudioLevel(Shared<Image> image, float audioLevel)
+        private void DrawFrame((Shared<Image> Image, float AudioLevel) frame)
         {
-            var pixbuf = this.ImageToPixbuf(image);
+            var pixbuf = this.ImageToPixbuf(frame.Image);
+
+            // clamp level to between 0 and 20
+            var audioLevel = frame.AudioLevel < 0 ? 0 : frame.AudioLevel > 20 ? 20 : frame.AudioLevel;
+
             Gtk.Application.Invoke(
                 (sender, e) =>
                 {

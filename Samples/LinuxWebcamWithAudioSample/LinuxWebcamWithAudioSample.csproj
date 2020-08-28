@@ -20,6 +20,9 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MainWindow.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
