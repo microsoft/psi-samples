@@ -6,6 +6,7 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
     using System.ComponentModel;
     using System.Threading.Tasks;
     using System.Windows;
+    using System.Windows.Media.Imaging;
     using Microsoft.Psi.Audio;
     using Microsoft.Psi.Imaging;
     using Microsoft.Psi.Media;
@@ -16,7 +17,7 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
     public partial class MainWindow
     {
         private Pipeline pipeline;
-        private DisplayImage displayImage = new DisplayImage();
+        private WriteableBitmap bitmap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -26,7 +27,6 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
             this.InitializeComponent();
             this.Loaded += this.MainWindow_Loaded;
             this.Closing += this.MainWindow_Closing;
-            this.DataContext = this.displayImage;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -52,13 +52,8 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
             webcamWithAudioEnergy.Do(
                 frame =>
                 {
-                    var image = frame.Item1;
-                    var audioLevel = frame.Item2;
-
-                    this.DrawAudioLevel(image, audioLevel);
-
                     // Update the window image with the latest frame
-                    this.Dispatcher.Invoke(() => this.displayImage.UpdateImage(image));
+                    this.Dispatcher.Invoke(() => this.DrawFrame(frame));
                 },
                 DeliveryPolicy.LatestMessage);
 
@@ -66,15 +61,42 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
             this.pipeline.RunAsync();
         }
 
-        private void DrawAudioLevel(Shared<Image> image, float audioLevel)
+        private void DrawFrame((Shared<Image> Image, float AudioLevel) frame)
         {
-            // clamp level to between 0 and 20
-            audioLevel = audioLevel < 0 ? 0 : audioLevel > 20 ? 20 : audioLevel;
+            // create a new bitmap if necessary
+            if (this.bitmap == null ||
+                this.bitmap.PixelWidth != frame.Image.Resource.Width ||
+                this.bitmap.PixelHeight != frame.Image.Resource.Height ||
+                this.bitmap.BackBufferStride != frame.Image.Resource.Stride)
+            {
+                this.bitmap = new WriteableBitmap(
+                    frame.Image.Resource.Width,
+                    frame.Image.Resource.Height,
+                    300,
+                    300,
+                    frame.Image.Resource.PixelFormat.ToWindowsMediaPixelFormat(),
+                    null);
 
-            // draw a green bar and text representing the audio level
-            var rect = new System.Drawing.Rectangle(0, 10, (int)(audioLevel * image.Resource.Width / 20), 20);
-            image.Resource.DrawRectangle(rect, System.Drawing.Color.Green, 20);
-            image.Resource.DrawText($"Audio Level: {audioLevel:0.0}", new System.Drawing.Point(0, 0), System.Drawing.Color.White);
+                this.image.Source = this.bitmap;
+            }
+
+            // update the display bitmap in-place
+            this.bitmap.WritePixels(
+                new Int32Rect(
+                    0,
+                    0,
+                    frame.Image.Resource.Width,
+                    frame.Image.Resource.Height),
+                frame.Image.Resource.ImageData,
+                frame.Image.Resource.Stride * frame.Image.Resource.Height,
+                frame.Image.Resource.Stride,
+                0,
+                0);
+
+            // clamp level to between 0 and 20
+            var audioLevel = frame.AudioLevel < 0 ? 0 : frame.AudioLevel > 20 ? 20 : frame.AudioLevel;
+            this.level.Value = audioLevel;
+            this.value.Text = audioLevel.ToString("0.0");
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -82,8 +104,8 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
             // We only want to exit once we know that the pipeline has finished shutting down. We will cancel this closing
             // event and register a handler to close the window when the PipelineCompleted event is raised by the pipeline.
             e.Cancel = true;
-            this.pipeline.PipelineCompleted += (s, e) => this.Dispatcher.Invoke(this.Close);
             this.Closing -= this.MainWindow_Closing;
+            this.pipeline.PipelineCompleted += (s, e) => this.Dispatcher.Invoke(this.Close);
 
             // Dispose the pipeline on a background thread so we don't block the UI thread while the pipeline is shutting down
             Task.Run(this.pipeline.Dispose);

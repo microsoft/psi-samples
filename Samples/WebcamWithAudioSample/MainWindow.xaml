@@ -8,14 +8,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Microsoft.Psi.Samples.WebcamWithAudioSample"
         mc:Ignorable="d"
-        Title="Webcam with Audio Sample" Width="640" Height="480">
+        Title="Webcam with Audio Sample" Width="640" Height="480" Background="Black">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Image Name="WebCamImg" Source="{Binding Path=Image}" Stretch="Fill" Grid.Row="0" Grid.Column="0"/>
+        <Image x:Name="image" Stretch="Uniform"/>
+        <ProgressBar x:Name="level" Maximum="20" Height="35" VerticalAlignment="Top" Foreground="Green" Background="Transparent" BorderBrush="Transparent"/>
+        <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
+            <TextBlock Text="Audio Level: " FontSize="24" Foreground="White" VerticalAlignment="Top"/>
+            <TextBlock x:Name="value" Text="0.0" FontSize="24" Foreground="White" VerticalAlignment="Top"/>
+        </StackPanel>
     </Grid>
 </Window>
