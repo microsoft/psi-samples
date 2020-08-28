@@ -79,14 +79,14 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            // Dispose the pipeline on a background thread so we don't block the UI thread while the pipeline is shutting down
-            Task.Run(this.pipeline.Dispose);
-
             // We only want to exit once we know that the pipeline has finished shutting down. We will cancel this closing
             // event and register a handler to close the window when the PipelineCompleted event is raised by the pipeline.
             e.Cancel = true;
             this.pipeline.PipelineCompleted += (s, e) => this.Dispatcher.Invoke(this.Close);
             this.Closing -= this.MainWindow_Closing;
+
+            // Dispose the pipeline on a background thread so we don't block the UI thread while the pipeline is shutting down
+            Task.Run(this.pipeline.Dispose);
         }
     }
 }
