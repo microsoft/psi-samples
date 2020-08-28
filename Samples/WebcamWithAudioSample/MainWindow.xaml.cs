@@ -53,7 +53,7 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
                 frame =>
                 {
                     // Update the window image with the latest frame
-                    this.Dispatcher.Invoke(() => this.DrawFrame(frame));
+                    this.DrawFrame(frame);
                 },
                 DeliveryPolicy.LatestMessage);
 
@@ -63,18 +63,31 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
 
         private void DrawFrame((Shared<Image> Image, float AudioLevel) frame)
         {
+            // clamp level to between 0 and 20
+            var audioLevel = frame.AudioLevel < 0 ? 0 : frame.AudioLevel > 20 ? 20 : frame.AudioLevel;
+
+            this.Dispatcher.Invoke(() =>
+            {
+                this.UpdateDisplayBitmap(frame.Image);
+                this.level.Value = audioLevel;
+                this.value.Text = audioLevel.ToString("0.0");
+            });
+        }
+
+        private void UpdateDisplayBitmap(Shared<Image> image)
+        {
             // create a new bitmap if necessary
             if (this.bitmap == null ||
-                this.bitmap.PixelWidth != frame.Image.Resource.Width ||
-                this.bitmap.PixelHeight != frame.Image.Resource.Height ||
-                this.bitmap.BackBufferStride != frame.Image.Resource.Stride)
+                this.bitmap.PixelWidth != image.Resource.Width ||
+                this.bitmap.PixelHeight != image.Resource.Height ||
+                this.bitmap.BackBufferStride != image.Resource.Stride)
             {
                 this.bitmap = new WriteableBitmap(
-                    frame.Image.Resource.Width,
-                    frame.Image.Resource.Height,
+                    image.Resource.Width,
+                    image.Resource.Height,
                     300,
                     300,
-                    frame.Image.Resource.PixelFormat.ToWindowsMediaPixelFormat(),
+                    image.Resource.PixelFormat.ToWindowsMediaPixelFormat(),
                     null);
 
                 this.image.Source = this.bitmap;
@@ -85,18 +98,13 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
                 new Int32Rect(
                     0,
                     0,
-                    frame.Image.Resource.Width,
-                    frame.Image.Resource.Height),
-                frame.Image.Resource.ImageData,
-                frame.Image.Resource.Stride * frame.Image.Resource.Height,
-                frame.Image.Resource.Stride,
+                    image.Resource.Width,
+                    image.Resource.Height),
+                image.Resource.ImageData,
+                image.Resource.Stride * image.Resource.Height,
+                image.Resource.Stride,
                 0,
                 0);
-
-            // clamp level to between 0 and 20
-            var audioLevel = frame.AudioLevel < 0 ? 0 : frame.AudioLevel > 20 ? 20 : frame.AudioLevel;
-            this.level.Value = audioLevel;
-            this.value.Text = audioLevel.ToString("0.0");
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
