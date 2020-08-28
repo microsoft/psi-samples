@@ -7,8 +7,8 @@ As indicated in the last column in the table below, some of the samples have a c
 
 | Name | Description | Windows | Linux | Walkthrough |
 | :----------- | :---------- | :--: | :--: | :--: |
-| [WebcamWithAudioSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) | This sample illustrates how to get images from a camera and audio from a microphone. | Yes | - | [Yes](https://github.com/Microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) | 
-| [LinuxWebcamWithAudioSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/LinuxWebcamWithAudioSample) | This sample illustrates how to get images from a camera and audio from a microphone on Linux. | - | Yes | [Yes](https://github.com/Microsoft/psi-samples/tree/main/Samples/LinuxWebcamWithAudioSample) | 
+| [WebcamWithAudioSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) | This sample illustrates how to display images from a camera and the audio energy level from a microphone. | Yes | - | [Yes](https://github.com/Microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) | 
+| [LinuxWebcamWithAudioSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/LinuxWebcamWithAudioSample) | This sample illustrates how to display images from a camera and the audio energy level from a microphone on Linux. | - | Yes | [Yes](https://github.com/Microsoft/psi-samples/tree/main/Samples/LinuxWebcamWithAudioSample) | 
 | [AzureKinectSample](https://github.com/microsoft/psi-samples/tree/main/Samples/AzureKinectSample) | This sample demonstrates how to use the Azure Kinect sensor with body tracking and how to use the `Join()` and `Pair()` operators to synchronize and fuse streams. | Yes | - | [Yes](https://github.com/microsoft/psi-samples/tree/main/Samples/AzureKinectSample) |
 | [KinectSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/KinectSample) | This sample illustrates how to augment an existing voice activity detector by leveraging information about lips motion extracted from Kinect face tracking. | Yes | - | - |
 | [SpeechSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/SpeechSample) | This sample illustrates how to use various speech recognition components. | Yes | - | - |
@@ -16,7 +16,6 @@ As indicated in the last column in the table below, some of the samples have a c
 | [RosTurtleSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/RosTurtleSample) | This sample illustrates how to connect Platform for Situated Intelligence to the `turtlesim` in ROS. | Yes | Yes | [Yes](https://github.com/Microsoft/psi-samples/tree/main/Samples/RosTurtleSample) |
 | [RosArmControlSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/RosArmControlSample) | This sample illustrates how to connect Platform for Situated Intelligence to control the [uArm Metal](http://ufactory.cc/#/en/uarm1) using ROS. | Yes | Yes | [Yes](https://github.com/Microsoft/psi-samples/tree/main/Samples/RosArmControlSample) |
 | [OpenCVSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/OpenCVSample) | This sample illustrates how to interop with OpenCV. | Yes | - | - |
-| [WpfSample](https://github.com/Microsoft/psi-samples/tree/main/Samples/WpfSample) | This sample illustrates how to write a Windows Presentation Foundation app that uses Platform for Situated Intelligence. | Yes | - | - |
 
 # Building
 
