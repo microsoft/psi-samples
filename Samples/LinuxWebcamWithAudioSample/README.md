@@ -12,20 +12,18 @@ This sample demonstrates how to capture an image stream from a webcam and an aud
 
 This sample uses Gtk (via the GtkSharp package) to display images and UI elements in a window. The majority of the code we will be concerned with is located in the `MainWindow_Shown` handler for the main window, located in the `MainWindow.cs` file. This is the event which will be raised when the main window is first shown and we will use it to initialize our \psi pipeline.
 
-The design and styling of the UI elements are defined in the `MainWindow.xml` and `Style.css` files respectively, but an understanding of these is not required for the purposes of this sample.
+The design and styling of the UI elements are defined in the `MainWindow.xml` and `Style.css` files respectively, but an understanding of these is not required for the purposes of this walkthrough.
 
 ## Capturing Video
 
-To capture video, we will create a new pipeline in the `MainWindow_Shown` handler method and add a `MediaCapture` and an `AudioCapture` component to it.
+To capture video, we will first create a new pipeline in the `MainWindow_Shown` handler method and add a `MediaCapture` component to it.
 
 ```csharp
 this.pipeline = Pipeline.Create();
 var webcam = new MediaCapture(this.pipeline, 640, 480, "/dev/video0", PixelFormatId.YUYV);
 ```
 
-Note that we store our pipeline in an instance variable, `this.pipeline`. This is typically the pattern used in \psi applications that have a UI (as opposed to a console application), where execution is usually event-driven.
-
-The video from the webcam will be captured as a stream of images using the `MediaCapture` component, which is initialized with arguments specifying the image resolution and the virtual device node name. Note that you may have to change these values depending on your hardware and the resolutions it supports.
+The video from the webcam will be captured as a stream of images using the `MediaCapture` component, which is initialized with arguments specifying the image resolution and the virtual device node name. Note that you may have to change these values to specify a supported capture resolution on the selected device.
 
 ## Capturing Audio
 
@@ -41,7 +39,7 @@ To learn more about working with audio in \psi, see the [Audio Overview](https:/
 
 ## Audio Processing
 
-Having captured an audio stream from a microphone, we perform some simple processing to extract the log energy level of the audio. This is done by piping the audio stream into an `AudioFeaturesExtractor` component which computes a variety of audio features from a raw audio stream. We will only be using the `LogEnergy` stream here. More information about this component can be found in the [Audio Overview](https://github.com/microsoft/psi/wiki/Audio-Overview#acoustic-feature-operators).
+Having captured an audio stream from the microphone, we now want to extract the log energy level of the audio signal. This is done by piping the audio stream into an `AudioFeaturesExtractor` component which computes a variety of audio features from the raw audio stream. We will only be using the `LogEnergy` stream in this sample. More information about this component can be found in the [Audio Overview](https://github.com/microsoft/psi/wiki/Audio-Overview#acoustic-feature-operators).
 
 ```csharp
 var acousticFeatures = new AcousticFeaturesExtractor(this.pipeline);
@@ -50,7 +48,7 @@ audio.PipeTo(acousticFeatures);
 
 ## Synchronizing the Streams
 
-As the video and audio streams originate from different devices and are captured at different rates, we will need to synchronize the video and computed audio energy streams in order to correlate the information we will be displaying in each frame. We will accomplish this using the `Join` operator.
+As the video and audio streams originate from different devices and are captured at different rates, we will need to synchronize the video and computed audio energy streams in order to correlate the information we will be displaying in each frame. Of course, we could simply display each stream independently of the other as messages arrive, but consider the hypothetical case where the images drastically lag behind the audio. We would then be associating audio information with image frames from the past. In order to avoid this, we will use the `Join` operator to synchronize the streams.
 
 ```csharp
 var webcamWithAudioEnergy = webcam.Join(acousticFeatures.LogEnergy, RelativeTimeInterval.Past());
@@ -60,7 +58,7 @@ Our ultimate goal is to display each webcam frame image overlaid with the correl
 
 ## Displaying the Frames
 
-Having joined the two streams, we now have a single `webcamWithAudioEnergy` stream carrying messages which are a tuples of (`Shared<Image>`, float), the first item being the frame image and the second being the closest computed log energy level. We can now display both pieces of information by passing the frames to the `DrawFrame` method, which implements the necessary functionality to render the image and the audio energy information over it. This is done within the `Do` operator to the `webcamWithAudioEnergy` stream, which will apply the method to each message on the stream.
+Having joined the two streams, we now have a single `webcamWithAudioEnergy` stream carrying messages which are a tuples of (`Shared<Image>`, float), the first item being the frame image and the second being the closest computed log energy level. We can now display both pieces of information by passing the frames to the `DrawFrame` method, which implements the necessary functionality to render the image and the audio energy information over it. This is done within the `Do` operator on the `webcamWithAudioEnergy` stream, which will apply the method to each message on the stream.
 
 ```csharp
 webcamWithAudioEnergy.Do(
@@ -71,11 +69,9 @@ webcamWithAudioEnergy.Do(
     DeliveryPolicy.LatestMessage);
 ```
 
-TODO: SHARED\<IMAGE\> The images in each frame are
-
 Note that the second argument to the `Do` operator specifies a `DeliveryPolicy` to apply to messages being delivered to the `Do` operator. By default, \psi streams will queue messages until components are able to receive and process them. We refer to this as a lossless or `Unlimited` delivery policy, where no messages are dropped and queues are allowed to grow.
 
-In this case however, we are only concerned with displaying the latest image in real time, so we do not want to queue and draw each frame if the UI cannot keep up, as this will lead to ever increasing memory usage and the frame images lagging further behind. The `LatestMessages` delivery policy allows frames to be dropped if they arrive at a rate that is faster than the `DrawFrame` method in the `Do` operator can draw them. For more information on delivery policies in \psi, see the [Delivery Policies](https://github.com/microsoft/psi/wiki/Delivery-Policies) tutorial.
+In this case however, we are only concerned with displaying the latest image in real time, so we do not want to queue and draw each frame if the UI cannot keep up, as this will lead to ever increasing memory usage and the displayed images lagging further behind. The `LatestMessages` delivery policy allows frames to be dropped if they arrive at a rate that is faster than the `DrawFrame` method in the `Do` operator can draw them. For more information on delivery policies in \psi, see the [Delivery Policies](https://github.com/microsoft/psi/wiki/Delivery-Policies) tutorial.
 
 ## Pipeline Start and Stop
 
