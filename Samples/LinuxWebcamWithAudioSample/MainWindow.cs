@@ -56,7 +56,7 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
             var webcam = new MediaCapture(this.pipeline, 640, 480, "/dev/video0", PixelFormatId.YUYV);
 
             // Create the audio capture component
-            var audio = new AudioCapture(this.pipeline, new AudioCaptureConfiguration { Format = WaveFormat.Create16kHz1Channel16BitPcm() });
+            var audio = new AudioCapture(this.pipeline, new AudioCaptureConfiguration { DeviceName = "plughw:0,0", Format = WaveFormat.Create16kHz1Channel16BitPcm() });
 
             // Create an acoustic features extractor component and pipe the audio to it
             var acousticFeatures = new AcousticFeaturesExtractor(this.pipeline);
@@ -109,6 +109,13 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
 
         private void MainWindow_DeleteEvent(object o, Gtk.DeleteEventArgs args)
         {
+            // We only want to exit once we know that the pipeline has finished shutting down. We will cancel this delete
+            // event and register a handler to close the window when the PipelineCompleted event is raised by the pipeline.
+            args.RetVal = true;
+            this.DeleteEvent -= this.MainWindow_DeleteEvent;
+            this.pipeline.PipelineCompleted += (s, e) => this.Close();
+
+            // Dispose the pipeline on a background thread so we don't block the UI thread while the pipeline is shutting down
             Task.Run(this.pipeline.Dispose);
         }
     }

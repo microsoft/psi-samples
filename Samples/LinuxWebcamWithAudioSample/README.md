@@ -30,7 +30,7 @@ The video from the webcam will be captured as a stream of images using the `Medi
 Similarly, we will add an `AudioCapture` component to the pipeline to acquire an audio stream from the microphone.
 
 ```csharp
-var audio = new AudioCapture(this.pipeline, new AudioCaptureConfiguration { Format = WaveFormat.Create16kHz1Channel16BitPcm() });
+var audio = new AudioCapture(this.pipeline, new AudioCaptureConfiguration { DeviceName = "plughw:0,0", Format = WaveFormat.Create16kHz1Channel16BitPcm() });
 ```
 
 As configured, this will capture 16 kHz, 16-bit mono PCM audio from the ALSA plugin device `plughw:0,0`. You may need to modify the value of the `DeviceName` property depending on your audio hardware configuration. This is typically of the form "plughw:_c_,_d_" where _c_ is the soundcard index and _d_ is the device index (e.g. "plughw:0,0", "plughw:1,0", etc.). You can list the available capture devices using the `arecord -L` command.
@@ -58,7 +58,7 @@ Our ultimate goal is to display each webcam frame image overlaid with the correl
 
 ## Displaying the Frames
 
-Having joined the two streams, we now have a single `webcamWithAudioEnergy` stream carrying messages which are a tuples of (`Shared<Image>`, float), the first item being the frame image and the second being the closest computed log energy level. We can now display both pieces of information by passing the frames to the `DrawFrame` method, which implements the necessary functionality to render the image and the audio energy information over it. This is done within the `Do` operator on the `webcamWithAudioEnergy` stream, which will apply the method to each message on the stream.
+Having joined the two streams, we now have a single `webcamWithAudioEnergy` stream of type `(Shared<Image>, float)`, the first item of each message being the frame image and the second being the closest computed log energy level for that frame. We can now display both pieces of information by passing the frames to the `DrawFrame` method, which implements the necessary functionality to render the image and the audio energy information over it. This is done within the `Do` operator on the `webcamWithAudioEnergy` stream, which will apply the method to each message on the stream.
 
 ```csharp
 webcamWithAudioEnergy.Do(
