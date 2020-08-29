@@ -41,7 +41,59 @@ To learn more about working with audio in \psi, see the [Audio Overview](https:/
 
 ## Audio Processing
 
-Having captured an audio stream from a microphone, we perform some simple processing to extract the log energy level of the audio. This is done by piping the audio stream into an `AudioFeaturesExtractor` component which extracts a variety of audio features from a raw audio stream.
+Having captured an audio stream from a microphone, we perform some simple processing to extract the log energy level of the audio. This is done by piping the audio stream into an `AudioFeaturesExtractor` component which computes a variety of audio features from a raw audio stream. We will only be using the `LogEnergy` stream here. More information about this component can be found in the [Audio Overview](https://github.com/microsoft/psi/wiki/Audio-Overview#acoustic-feature-operators).
+
+```csharp
+var acousticFeatures = new AcousticFeaturesExtractor(this.pipeline);
+audio.PipeTo(acousticFeatures);
+```
+
+## Synchronizing the Streams
+
+As the video and audio streams originate from different devices and are captured at different rates, we will need to synchronize the video and computed audio energy streams in order to correlate the information we will be displaying in each frame. We will accomplish this using the `Join` operator.
+
+```csharp
+var webcamWithAudioEnergy = webcam.Join(acousticFeatures.LogEnergy, RelativeTimeInterval.Past());
+```
+
+Our ultimate goal is to display each webcam frame image overlaid with the correlated audio energy at the originating time of the frame. We therefore take the `webcam` stream and `Join` it with the `LogEnergy` stream. The `Join` operator takes a `RelativeTimeInterval` which specifies a window within which to locate a message on the `LogEnergy` stream which is closest in originating time to each webcam image. Here, we simply use a relative time interval of `Past` which will match the most recent message in originating time that occurs at or before the originating time of the webcam image. Note that we cannot do an exact join because the two streams will almost certainly not have messages with identical originating times. There are other versions of the `Join` operator that provide different ways joining streams. For a more in-depth look at the topic of stream fusion and the `Join` operator, refer to the tutorial on [Stream Fusion and Merging](https://github.com/microsoft/psi/wiki/Stream-Fusion-and-Merging).
+
+## Displaying the Frames
+
+Having joined the two streams, we now have a single `webcamWithAudioEnergy` stream carrying messages which are a tuples of (`Shared<Image>`, float), the first item being the frame image and the second being the closest computed log energy level. We can now display both pieces of information by passing the frames to the `DrawFrame` method, which implements the necessary functionality to render the image and the audio energy information over it. This is done within the `Do` operator to the `webcamWithAudioEnergy` stream, which will apply the method to each message on the stream.
+
+```csharp
+webcamWithAudioEnergy.Do(
+    frame =>
+    {
+        this.DrawFrame(frame);
+    },
+    DeliveryPolicy.LatestMessage);
+```
+
+TODO: SHARED\<IMAGE\> The images in each frame are
+
+Note that the second argument to the `Do` operator specifies a `DeliveryPolicy` to apply to messages being delivered to the `Do` operator. By default, \psi streams will queue messages until components are able to receive and process them. We refer to this as a lossless or `Unlimited` delivery policy, where no messages are dropped and queues are allowed to grow.
+
+In this case however, we are only concerned with displaying the latest image in real time, so we do not want to queue and draw each frame if the UI cannot keep up, as this will lead to ever increasing memory usage and the frame images lagging further behind. The `LatestMessages` delivery policy allows frames to be dropped if they arrive at a rate that is faster than the `DrawFrame` method in the `Do` operator can draw them. For more information on delivery policies in \psi, see the [Delivery Policies](https://github.com/microsoft/psi/wiki/Delivery-Policies) tutorial.
+
+## Pipeline Start and Stop
+
+Finally, all that remains is to run the pipeline to begin capturing and displaying frames. Since we are starting the pipeline from within a window handler method, we use the `RunAsync` method to start the pipeline in the background and return control immediately to the UI.
+
+```csharp
+this.pipeline.RunAsync();
+```
+
+Once the pipeline has started running, it will continue capturing video and audio and displaying the frames in the window as previously described until the `this.pipeline` object is disposed. We therefore need to call the `Pipeline.Dispose` method in the window's `DeleteEvent` handler, which will be invoked when the user closes the window.
+
+Because the pipeline itself executes methods that invoke onto the UI thread (specifically in the `DrawFrame` method), we cannot directly call the `Pipeline.Dispose` method from within a window handler which also runs on the UI thread, as this could potentially lead to deadlock with the pipeline background threads waiting to invoke onto the UI thread during shutdown. The simplest way around this is to spin up a `Task` to dispose the pipeline on a thread pool thread.
+
+```csharp
+Task.Run(this.pipeline.Dispose);
+```
 
 ## Links
 * [Audio Overview](https://github.com/microsoft/psi/wiki/Audio-Overview)
+* [Stream Fusion and Merging](https://github.com/microsoft/psi/wiki/Stream-Fusion-and-Merging)
+* [Delivery Policies](https://github.com/microsoft/psi/wiki/Delivery-Policies)
