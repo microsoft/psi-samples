@@ -3,8 +3,8 @@
 
 namespace Microsoft.Psi.Samples.WebcamWithAudioSample
 {
+    using System;
     using System.ComponentModel;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Media.Imaging;
     using Microsoft.Psi.Audio;
@@ -18,6 +18,7 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
     {
         private Pipeline pipeline;
         private WriteableBitmap bitmap;
+        private IntPtr bitmapPtr;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -63,60 +64,58 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
 
         private void DrawFrame((Shared<Image> Image, float AudioLevel) frame)
         {
+            // copy the frame image to the display bitmap
+            this.UpdateBitmap(frame.Image);
+
             // clamp level to between 0 and 20
             var audioLevel = frame.AudioLevel < 0 ? 0 : frame.AudioLevel > 20 ? 20 : frame.AudioLevel;
 
-            this.Dispatcher.Invoke(() =>
-            {
-                this.UpdateDisplayBitmap(frame.Image);
-                this.level.Value = audioLevel;
-                this.value.Text = audioLevel.ToString("0.0");
-            });
+            // redraw on the UI thread
+            this.Dispatcher.BeginInvoke(
+                new Action(() =>
+                {
+                    this.InvalidateBitmap();
+                    this.level.Value = audioLevel;
+                    this.value.Text = audioLevel.ToString("0.0");
+                }));
         }
 
-        private void UpdateDisplayBitmap(Shared<Image> image)
+        private void UpdateBitmap(Shared<Image> image)
         {
             // create a new bitmap if necessary
-            if (this.bitmap == null ||
-                this.bitmap.PixelWidth != image.Resource.Width ||
-                this.bitmap.PixelHeight != image.Resource.Height ||
-                this.bitmap.BackBufferStride != image.Resource.Stride)
+            if (this.bitmap == null)
             {
-                this.bitmap = new WriteableBitmap(
-                    image.Resource.Width,
-                    image.Resource.Height,
-                    300,
-                    300,
-                    image.Resource.PixelFormat.ToWindowsMediaPixelFormat(),
-                    null);
+                // WriteableBitmap must be created on the UI thread
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.bitmap = new WriteableBitmap(
+                        image.Resource.Width,
+                        image.Resource.Height,
+                        300,
+                        300,
+                        image.Resource.PixelFormat.ToWindowsMediaPixelFormat(),
+                        null);
 
-                this.image.Source = this.bitmap;
+                    this.image.Source = this.bitmap;
+                    this.bitmapPtr = this.bitmap.BackBuffer;
+                });
             }
 
-            // update the display bitmap in-place
-            this.bitmap.WritePixels(
-                new Int32Rect(
-                    0,
-                    0,
-                    image.Resource.Width,
-                    image.Resource.Height),
-                image.Resource.ImageData,
-                image.Resource.Stride * image.Resource.Height,
-                image.Resource.Stride,
-                0,
-                0);
+            // update the display bitmap's back buffer
+            image.Resource.CopyTo(this.bitmapPtr, image.Resource.Width, image.Resource.Height, image.Resource.Stride, image.Resource.PixelFormat);
+        }
+
+        private void InvalidateBitmap()
+        {
+            // invalidate the entire area of the bitmap to cause a redraw
+            this.bitmap.Lock();
+            this.bitmap.AddDirtyRect(new Int32Rect(0, 0, this.bitmap.PixelWidth, this.bitmap.PixelHeight));
+            this.bitmap.Unlock();
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            // We only want to exit once we know that the pipeline has finished shutting down. We will cancel this closing
-            // event and register a handler to close the window when the PipelineCompleted event is raised by the pipeline.
-            e.Cancel = true;
-            this.Closing -= this.MainWindow_Closing;
-            this.pipeline.PipelineCompleted += (s, e) => this.Dispatcher.Invoke(this.Close);
-
-            // Dispose the pipeline on a background thread so we don't block the UI thread while the pipeline is shutting down
-            Task.Run(this.pipeline.Dispose);
+            this.pipeline.Dispose();
         }
     }
 }

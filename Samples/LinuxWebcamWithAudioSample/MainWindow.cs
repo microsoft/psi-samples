@@ -6,7 +6,6 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
     using System;
     using System.IO;
     using System.Reflection;
-    using System.Threading.Tasks;
     using Gdk;
     using Microsoft.Psi;
     using Microsoft.Psi.Audio;
@@ -81,11 +80,13 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
 
         private void DrawFrame((Shared<Image> Image, float AudioLevel) frame)
         {
+            // copy the frame image to the pixel buffer
             var pixbuf = this.ImageToPixbuf(frame.Image);
 
             // clamp level to between 0 and 20
             var audioLevel = frame.AudioLevel < 0 ? 0 : frame.AudioLevel > 20 ? 20 : frame.AudioLevel;
 
+            // redraw on the UI thread
             Gtk.Application.Invoke(
                 (sender, e) =>
                 {
