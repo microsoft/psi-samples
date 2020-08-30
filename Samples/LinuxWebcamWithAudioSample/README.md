@@ -86,7 +86,7 @@ this.pipeline.RunAsync();
 Once the pipeline has started running, it will continue capturing video and audio and displaying the frames in the window as previously described until the `this.pipeline` object is disposed. We therefore need to call the `Pipeline.Dispose` method in the window's `DeleteEvent` handler, which will be invoked when the user closes the window.
 
 ```csharp
-this.pipeline.Dispose( );
+this.pipeline.Dispose();
 ```
 
 ## Links
