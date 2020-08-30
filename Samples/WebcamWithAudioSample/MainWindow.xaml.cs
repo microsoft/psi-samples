@@ -74,9 +74,9 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
             this.Dispatcher.BeginInvoke(
                 new Action(() =>
                 {
-                    this.InvalidateBitmap();
-                    this.level.Value = audioLevel;
-                    this.value.Text = audioLevel.ToString("0.0");
+                    this.UpdateDisplayImage();
+                    this.displayLevel.Value = audioLevel;
+                    this.displayText.Text = audioLevel.ToString("0.0");
                 }));
         }
 
@@ -105,9 +105,9 @@ namespace Microsoft.Psi.Samples.WebcamWithAudioSample
             image.Resource.CopyTo(this.bitmapPtr, image.Resource.Width, image.Resource.Height, image.Resource.Stride, image.Resource.PixelFormat);
         }
 
-        private void InvalidateBitmap()
+        private void UpdateDisplayImage()
         {
-            // invalidate the entire area of the bitmap to cause a redraw
+            // invalidate the entire area of the bitmap to cause the display image to be redrawn
             this.bitmap.Lock();
             this.bitmap.AddDirtyRect(new Int32Rect(0, 0, this.bitmap.PixelWidth, this.bitmap.PixelHeight));
             this.bitmap.Unlock();

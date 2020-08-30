@@ -69,6 +69,8 @@ webcamWithAudioEnergy.Do(
     DeliveryPolicy.LatestMessage);
 ```
 
+The `DrawFrame` method copies the frame image data to a `Pixbuf` object which is then used to update the displayed image. The audio level is rendered as a horizontal bar and text.
+
 Note that the second argument to the `Do` operator specifies a `DeliveryPolicy` to apply to messages being delivered to the `Do` operator. By default, \psi streams will queue messages until components are able to receive and process them. We refer to this as a lossless or `Unlimited` delivery policy, where no messages are dropped and queues are allowed to grow.
 
 In this case however, we are only concerned with displaying the latest image in real time, so we do not want to queue and draw each frame if the UI cannot keep up, as this will lead to ever increasing memory usage and the displayed images lagging further behind. The `LatestMessages` delivery policy allows frames to be dropped if they arrive at a rate that is faster than the `DrawFrame` method in the `Do` operator can draw them. For more information on delivery policies in \psi, see the [Delivery Policies](https://github.com/microsoft/psi/wiki/Delivery-Policies) tutorial.
@@ -83,10 +85,8 @@ this.pipeline.RunAsync();
 
 Once the pipeline has started running, it will continue capturing video and audio and displaying the frames in the window as previously described until the `this.pipeline` object is disposed. We therefore need to call the `Pipeline.Dispose` method in the window's `DeleteEvent` handler, which will be invoked when the user closes the window.
 
-Because the pipeline itself executes methods that invoke onto the UI thread (specifically in the `DrawFrame` method), we cannot directly call the `Pipeline.Dispose` method from within a window handler which also runs on the UI thread, as this could potentially lead to deadlock with the pipeline background threads waiting to invoke onto the UI thread during shutdown. The simplest way around this is to spin up a `Task` to dispose the pipeline on a thread pool thread.
-
 ```csharp
-Task.Run(this.pipeline.Dispose);
+this.pipeline.Dispose( );
 ```
 
 ## Links
