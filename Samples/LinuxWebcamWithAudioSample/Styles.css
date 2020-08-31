@@ -1,0 +1,24 @@
+window {
+  background-color: black;
+}
+
+label {
+  margin-top: 2px;
+  color: white;
+  font: 24px "Sans";
+}
+
+levelbar trough {
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+levelbar trough block.empty {
+  border: none;
+}
+
+levelbar trough block.filled {
+  background-color: green;
+  border: none;
+}

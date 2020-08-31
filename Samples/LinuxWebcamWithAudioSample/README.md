@@ -4,35 +4,38 @@ This sample demonstrates how to capture an image stream from a webcam and an aud
 
 ## Prerequisites
 
-* A webcam or other image capture device.
+* A webcam that is accessible via a virtual device node such as `/dev/video0`.
 * A microphone or other audio capture device.
+* ALSA sound libraries installed (see [Audio Overview](https://github.com/microsoft/psi/wiki/Audio-Overview#troubleshooting-audio-on-linux)).
 
 ## Sample Overview
 
-This sample uses WPF to display images and UI elements in a window. The majority of the code we will be concerned with is located in the `MainWindow_Loaded` handler for the main window, located in the `MainWindow.xaml.cs` file. This is the event which will be raised when the main window is first loaded and we will use it to initialize our \psi pipeline.
+This sample uses Gtk (via the GtkSharp package) to display images and UI elements in a window. The majority of the code we will be concerned with is located in the `MainWindow_Shown` handler for the main window, located in the `MainWindow.cs` file. This is the event which will be raised when the main window is first shown and we will use it to initialize our \psi pipeline.
 
-The design the UI itself is defined in the `MainWindow.xaml.xml` file, but an understanding of this is not required for the purposes of this walkthrough.
+The design and styling of the UI elements are defined in the `MainWindow.xml` and `Style.css` files respectively, but an understanding of these is not required for the purposes of this walkthrough.
 
 ## Capturing Video
 
-To capture video, we will first create a new pipeline in the `MainWindow_Loaded` handler method and add a `MediaCapture` component to it.
+To capture video, we will first create a new pipeline in the `MainWindow_Shown` handler method and add a `MediaCapture` component to it.
 
 ```csharp
 this.pipeline = Pipeline.Create();
-var webcam = new MediaCapture(this.pipeline, 640, 480, 30);
+var webcam = new MediaCapture(this.pipeline, 640, 480, "/dev/video0", PixelFormatId.YUYV);
 ```
 
-The video from the webcam will be captured as a stream of images using the `MediaCapture` component, which is initialized with arguments specifying the image resolution and frame rate. Note that you may have to change these values to specify a supported capture resolution and framerate for your webcam.
+The video from the webcam will be captured as a stream of images using the `MediaCapture` component, which is initialized with arguments specifying the image resolution and the virtual device node name. Note that you may have to change these values to specify a supported capture resolution on the selected device.
 
 ## Capturing Audio
 
 Similarly, we will add an `AudioCapture` component to the pipeline to acquire an audio stream from the microphone.
 
 ```csharp
-var audio = new AudioCapture(this.pipeline, WaveFormat.Create16kHz1Channel16BitPcm());
+var audio = new AudioCapture(this.pipeline, new AudioCaptureConfiguration { DeviceName = "plughw:0,0", Format = WaveFormat.Create16kHz1Channel16BitPcm() });
 ```
 
-As configured, this will capture 16 kHz, 16-bit mono PCM audio from the default audio input device. To learn more about working with audio in \psi, see the [Audio Overview](https://github.com/microsoft/psi/wiki/Audio-Overview) wiki page.
+As configured, this will capture 16 kHz, 16-bit mono PCM audio from the ALSA plugin device `plughw:0,0`. You may need to modify the value of the `DeviceName` property depending on your audio hardware configuration. This is typically of the form "plughw:_c_,_d_" where _c_ is the soundcard index and _d_ is the device index (e.g. "plughw:0,0", "plughw:1,0", etc.). You can list the available capture devices using the `arecord -L` command.
+
+To learn more about working with audio in \psi, see the [Audio Overview](https://github.com/microsoft/psi/wiki/Audio-Overview) wiki page.
 
 ## Audio Processing
 
@@ -66,7 +69,7 @@ webcamWithAudioEnergy.Do(
     DeliveryPolicy.LatestMessage);
 ```
 
-The `DrawFrame` method copies the frame image data to a `WriteableBitmap` object which represents the displayed image. The displayed image is then updated. The audio level is rendered as a horizontal bar and text.
+The `DrawFrame` method copies the frame image data to a `Pixbuf` object which is then used to update the displayed image. The audio level is rendered as a horizontal bar and text.
 
 Note that the second argument to the `Do` operator specifies a `DeliveryPolicy` to apply to messages being delivered to the `Do` operator. By default, \psi streams will queue messages until components are able to receive and process them. We refer to this as a lossless or `Unlimited` delivery policy, where no messages are dropped and queues are allowed to grow.
 
@@ -80,7 +83,7 @@ Finally, all that remains is to run the pipeline to begin capturing and displayi
 this.pipeline.RunAsync();
 ```
 
-Once the pipeline has started running, it will continue capturing video and audio and displaying the frames in the window as previously described until the `this.pipeline` object is disposed. We therefore need to call the `Pipeline.Dispose` method in the window's `Closing` handler, which will be invoked when the user closes the window.
+Once the pipeline has started running, it will continue capturing video and audio and displaying the frames in the window as previously described until the `this.pipeline` object is disposed. We therefore need to call the `Pipeline.Dispose` method in the window's `DeleteEvent` handler, which will be invoked when the user closes the window.
 
 ```csharp
 this.pipeline.Dispose();

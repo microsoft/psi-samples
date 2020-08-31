@@ -1,55 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <ApplicationIcon />
-    <OutputType>WinExe</OutputType>
-    <StartupObject>PsiWpfSample.App</StartupObject>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <CodeAnalysisRuleSet>../../Build/Sample.Psi.ruleset</CodeAnalysisRuleSet>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject>Microsoft.Psi.Samples.LinuxWebcamWithAudioSample.Program</StartupObject>
+    <RootNamespace>Microsoft.Psi.Samples.LinuxWebcamWithAudioSample</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <PlatformTarget>x64</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <PlatformTarget>x64</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="App.xaml" />
-    <None Remove="MainWindow.xaml" />
+    <EmbeddedResource Include="MainWindow.xml" />
+    <EmbeddedResource Include="Styles.css" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="stylecop.json" />
+    <None Remove="Styles.css" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Psi.Imaging" Version="0.12.53.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Imaging.Windows" Version="0.12.53.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Media.Windows.x64" Version="0.12.53.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.12.53.2-beta" />
+    <PackageReference Include="GtkSharp" Version="3.22.25.125" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Psi.Audio" Version="0.12.53.2-beta" />
+    <PackageReference Include="Microsoft.Psi.Audio.Linux" Version="0.12.53.2-beta" />
+    <PackageReference Include="Microsoft.Psi.Imaging" Version="0.12.53.2-beta" />
+    <PackageReference Include="Microsoft.Psi.Media.Linux" Version="0.12.53.2-beta" />
+    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.12.53.2-beta" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="MainWindow.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>
