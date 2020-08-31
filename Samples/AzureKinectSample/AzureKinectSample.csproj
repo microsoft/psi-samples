@@ -36,8 +36,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Psi.AzureKinect.x64" Version="0.12.53.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Calibration" Version="0.12.53.2-beta" />
+    <PackageReference Include="Microsoft.Psi.AzureKinect.x64" Version="0.13.38.2-beta" />
+    <PackageReference Include="Microsoft.Psi.Calibration" Version="0.13.38.2-beta" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

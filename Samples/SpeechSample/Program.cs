@@ -107,7 +107,7 @@ namespace Microsoft.Psi.Samples.SpeechSample
                 if (inputLogPath != null)
                 {
                     // Open the MicrophoneAudio stream from the last saved log
-                    var store = Store.Open(pipeline, AppName, inputLogPath);
+                    var store = PsiStore.Open(pipeline, AppName, inputLogPath);
                     audioInput = store.OpenStream<AudioBuffer>($"{AppName}.MicrophoneAudio");
                 }
                 else
@@ -193,7 +193,7 @@ namespace Microsoft.Psi.Samples.SpeechSample
                 if (inputLogPath != null)
                 {
                     // Open the MicrophoneAudio stream from the last saved log
-                    var store = Store.Open(pipeline, AppName, inputLogPath);
+                    var store = PsiStore.Open(pipeline, AppName, inputLogPath);
                     audioInput = store.OpenStream<AudioBuffer>($"{AppName}.MicrophoneAudio");
                 }
                 else
@@ -289,7 +289,7 @@ namespace Microsoft.Psi.Samples.SpeechSample
             string dataStoreName = (outputLogPath != null) ? AppName : null;
 
             // Create the store only if it is needed (logging to disk).
-            return (dataStoreName != null) ? Store.Create(pipeline, dataStoreName, outputLogPath) : null;
+            return (dataStoreName != null) ? PsiStore.Create(pipeline, dataStoreName, outputLogPath) : null;
         }
 
         /// <summary>
