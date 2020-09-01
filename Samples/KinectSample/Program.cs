@@ -152,7 +152,7 @@ namespace MultiModalSpeechDetection
 
                 // Create store for the data. Live Visualizer can only read data from a store.
                 var pathToStore = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
-                var store = Store.Create(pipeline, ApplicationName, pathToStore);
+                var store = PsiStore.Create(pipeline, ApplicationName, pathToStore);
 
                 mouthOpen.Select(v => v ? 1d : 0d).Write("MouthOpen", store);
 
