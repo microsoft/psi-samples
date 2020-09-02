@@ -603,6 +603,6 @@ Have fun!
 
 ## Links
 
-* A simpler [tutorial using `turtlesim`](https://github.com/Microsoft/psi/blob/master/Samples/RosTurtleSample)
+* A simpler [tutorial using `turtlesim`](https://github.com/Microsoft/psi-samples/blob/main/Samples/RosTurtleSample)
 * [Blog covering uArm ROS library](http://www.aransena.com/blog/2016/9/13/uarm-controller)
 * Official [`UArmForROS` package](https://github.com/uArm-Developer/UArmForROS) (not being used)
