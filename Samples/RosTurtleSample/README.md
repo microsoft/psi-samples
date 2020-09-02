@@ -276,5 +276,5 @@ Also, in the less common case that you run a distributed ROS system in which nod
 
 ## Links
 
-* A [tutorial using physical robot arm hardware](https://github.com/Microsoft/psi/blob/master/Samples/RosArmControlSample)
+* A [tutorial using physical robot arm hardware](https://github.com/Microsoft/psi-samples/blob/main/Samples/RosArmControlSample)
 * An [overview of ROS and our ROS bridge](https://github.com/microsoft/psi/wiki/ROS-Integration)
