@@ -6,9 +6,15 @@ namespace HelloWorld
     using System;
     using Microsoft.Psi;
 
-    class Program
+    /// <summary>
+    /// Hello world sample.
+    /// </summary>
+    public static class Program
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// Main entry point.
+        /// </summary>
+        public static void Main()
         {
             // Create a pipeline
             var p = Pipeline.Create();
