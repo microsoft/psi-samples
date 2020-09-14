@@ -22,11 +22,11 @@ namespace HelloWorld
             // Create a timer component that produces a message every second
             var timer = Timers.Timer(p, TimeSpan.FromSeconds(1));
 
-            // For each message created by the timer, print "Hello world!" and keep track of the count
-            int count = 0;
-            timer.Do(t =>
+            // For each message created by the timer, print "Hello world!"
+            // along with the message's originating time.
+            timer.Do((t, e) =>
             {
-                Console.WriteLine($"{count++}: Hello world!");
+                Console.WriteLine($"{e.OriginatingTime}: Hello world!");
             });
 
             // Run the pipeline, but don't block here
