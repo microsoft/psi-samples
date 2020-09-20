@@ -1,31 +1,24 @@
 # Simple Voice Activity Detector
 
-This sample... [overview of the sample and its goals]. It's important to note that this sample represents a very simple, naive approach to implementing voice activy detection, and is meant only to be a good illustrator of several important concepts in \\psi. For best results, we recommend using a headset microphone when running, testing, and tuning the sample code in your own environment.
+This sample provides a very simple example of _voice activity detection_: given an audio stream emitted by a microphone, it computes a boolean signal representing whether or not the audio contains voiced speech. The primary purpose of this sample is to walk you through a basic example of a \\psi application, and introduce some of the basic concepts around instantiating components, wiring them together, persisting data, replaying from data stores, and tuning your applications. It's important to note that this sample represents a very simple, naive approach to implementing voice activy detection, and is meant only to be a good illustrator of several important concepts in \\psi. For best results, we recommend using a headset microphone when running, testing, and tuning the sample code in your own environment.
 
 The sample includes the following aspects:
-1. Instantiating a microphone component,
-2. Extracting acoustic features from the microphone's audio stream,
-3. Using stream operators to compute voice activity over the extracted acoustic features,
-4. Filtering the voice activity stream by aggregating over historical buffers, and
-5. Persisting all results to stores for visualization and tuning.
+1. Setting up a basic application pipeline,
+2. Instantiating and connecting microphone and acoustic feature extractor components,
+3. Executing a live pipeline and persisting results to disk,
+4. Visualizing the results in the PsiStudio tool,
+5. Using stream operators to compute and filter a voice activity stream, and
+6. Replaying from persisted data and visualizing results again to iteratively tune the application.
 
-In this walkthrough, we will Running live, collecting data, and visualizing in PsiStudio. We will then walkthrough how to make a simple code change that allows you to __replay__ the application from previously persisted data, rather than live, which is extremely useful for tuning our applications.
-
-Following these instructions step-by-step, you will end up constructing the sample from scratch, and learning about these concepts in the process. We recommend before perusing this walkthrough to read the [Brief Introduction](https://github.com/microsoft/psi/wiki/Brief-Introduction) tutorial, which introduces some of the main concepts in \\psi.
+Following these instructions step-by-step, you will end up constructing the sample from scratch, learning several important concepts along the way. We recommend before perusing this walkthrough to read the [Brief Introduction](https://github.com/microsoft/psi/wiki/Brief-Introduction) tutorial, which introduces some of the fundamental aspects of \\psi.
 
 ## Setting up the project
 
-This sample works on both Windows and Linux.
+This sample runs on both Windows and Linux. Let's begin by creating a simple .NET Core console app (In Visual Studio: _File -> New Project -> Visual C# -> Console App (.NET Core)_)
 
-We begin by creating a new C# Console App project, targeting the .NET Framework 4.7.2, and we add the following nuget packages:
+We'll add the following [NuGet packages](https://github.com/microsoft/psi/wiki/List-of-NuGet-Packages):
 - `Microsoft.Psi.Runtime`: provides core \\psi infrastructure
 - `Microsoft.Psi.Audio.[Windows/Linux]`: provides audio components and APIs (choose the one that corresponds to your OS)
-
-Let's create a C# Console App .NET Core (in Visual Studio, the steps are...).
-
-NuGet packages we need: Microsoft.Psi.Runtime. Contains most of the core bits of the psi infrastructure.
-	Microsoft.Psi.Audio.Windows/Linux. It contains...
-	To know which NuGet packages you might need for your own apps, refer to the documentation here.
 
 ## Setting up the application pipeline
 
@@ -39,9 +32,7 @@ using Microsoft.Psi;
 using Microsoft.Psi.Audio;
 ```
 
-Psi applications consist of pipelines of components connected to each other via streams of data. So the first thing we have to do is create the pipeline. This can be done easily via a factory method called Pipeline.Create, which we can invoke to get a pipeline object.
-
-To run it, we can simply run the Run method, or it's non-blocking version, RunAsync. We can then wait until the user hits a key with Console.ReadKey, before stopping the pipeline, which is accomplished with its Dispose method.
+Psi applications consist of pipelines of components connected to each other via streams of data. So the first thing we have to do is create the pipeline. This can be done easily via a factory method called `Pipeline.Create`, which we can invoke to get a pipeline object. To run it, we can simply use the `Run` method, or it's non-blocking version, `RunAsync`. We can then wait until the user hits a key with `Console.ReadKey`, before stopping the pipeline, which is accomplished with its `Dispose` method (we don't need to explicitly invoke `Dispose` when the `using` pattern is utilized, as `Dispose` is implicitly called at the end of the block):
 
 ```csharp
 public static void Main()
@@ -56,11 +47,11 @@ public static void Main()
 
 ## Adding microphone and acoustic feature components
 
-At this point the pipeline is empty with no components, so now let's add some components.
+At this point the pipeline is empty, so now let's add some components.
 
-These lines of code create a microphone and an acoustic feature extractor and connect them together. The first line creates the microphone by creating a new instance of this AudioCapture component class. Every time you instantiate a component in psi, you have to pass it the pipeline object that it belongs to, and this component also takes a configuration parameter specifying the audio format.
+The following lines of code create a microphone and an acoustic feature extractor and connect them together. The first line creates the microphone by creating a new instance of the `AudioCapture` component class. Every time you instantiate a component in \\psi, you have to pass it the pipeline object that it belongs to. This component also takes a configuration parameter specifying the audio format. In this case, the format parameter specifies that the component should generate audio at 16Khz, on 1 channel, in a 16 bit PCM format.
 
-The third line connects the two together by using the PipeTo method.
+The third line connects the two together by using the `PipeTo` method.
 
 ```csharp
 using (var p = Pipeline.Create())
@@ -75,15 +66,13 @@ using (var p = Pipeline.Create())
 }
 ```
 
-Talk about emitters and receivers, and how technically it should be microphone.Out.PipeTo(aFE.In), but we don't need the "Out" and "In" in this case.
-
-We could have also written it this way:
+All components can have any number of _emitters_ for streaming output, and any number of _receivers_ for streaming input. In this case, the `AudioCapture` component implements the `IProducer<AudioBuffer>` interface, guaranteeing that it produces an `AudioBuffer` stream on an emitter called `Out`. Similarly, the `AcousticFeatureExtractor` component implements the `IConsumer<AudioBuffer>` interface, guaranteeing that it consumes an `AudioBuffer` stream in a receiver called `In`. The `PipeTo` operator knows to connect `.Out` to `.In` when the emitter and receiver are not specified, allowing for more readable code. Technically, however, the code could also have been written like so:
 
 ```csharp
 microphone.Out.PipeTo(acousticFeatureExtractor.In);
 ```
 
-Before running this, let's print some information to the console so we see something happening when we run the application. Let's apply the `Do()` operator to the `LogEnergy` output stream of the acousting feature extractor.
+Before running this pipeline, let's print some information to the console so we see something happening when we run the application. \\psi has a set of [basic stream operators](https://github.com/microsoft/psi/wiki/Basic-Stream-Operators) that work over generic streams, such as `Select()`, `Do()`, `Where()` and so forth. Let's apply the `Do()` operator to the `LogEnergy` output stream of the acoustic feature extractor, which executes a function for each message posted on the stream. In this case, we'll simply print the value of each message to the console.
 
 ```csharp
 // Create the microphone, acoustic feature extractor, and connect them
@@ -96,9 +85,9 @@ acousticFeaturesExtractor.LogEnergy
 	.Do(logEnergy => Console.WriteLine($"LogEnergy = {logEnergy}"));
 ```
 
-You should notice that the values will be low when you're quiet, and get higher when you talk. But the messages will probably be flowing by very fast, as the microphone will produce an audio buffer message every 10 ms or so.
+Let's now execute the application. You should notice that the values will be low when you're quiet, and get higher when you talk. But the messages will probably be flowing by very fast, as the microphone will produce an audio buffer message every 10 ms or so.
 
-Let's slow things down by inserting a `Sample()` operator to sample a message every 0.2 seconds.
+So let's slow things down by inserting a `Sample()` operator to sample and return a message only every 0.2 seconds.
 
 ```csharp
 // Display the log energy
@@ -107,7 +96,7 @@ acousticFeaturesExtractor.LogEnergy
 	.Do(logEnergy => Console.WriteLine($"LogEnergy = {logEnergy}"));
 ```
 
-You should again observe that the values are high when you speak and low when you are quiet.
+Run the application again, and you should see messages being printed more slowly (5 per second). You should still observe that the values are high when you speak and lower when you are quiet.
 
 ## Persisting streams to disk
 
@@ -117,7 +106,7 @@ Next we'll see how to persist streams to disk and how to visualize them. Data lo
 var store = PsiStore.Create(p, "SimpleVAD", Path.Combine(Directory.GetCurrentDirectory(), "Stores"));
 ```
 
-In addition to the pipeline object, the method takes in parameters for the desired name of the store, as well as it will be located on disk. Here we specified a folder called "Stores" inside the current directory to create the stores in.
+In addition to the pipeline object, the method takes in parameters for the desired name of the store, as well as where it will be located on disk. Here we specified a folder called "Stores" inside the current directory to create the stores in.
 
 Specifying which streams we'd like to persist to the store is very simple. Let's try persisting the microphone's audio stream, as well as two of the output streams from the acoustic feature extractor. We use the stream operator `Write()`, and we need to specify names for these written streams.
 
@@ -133,16 +122,14 @@ The persistence system in \\psi is optimized for throughput, and you will see mu
 
 ## Visualizing the basic streams
 
-Our goal here is to inspect the data we just persisted and figure out a good `LogEnergy` value that separates speech from non-speech.
-
-as PsiStudio does not currently ship as a binary, you will have to build the tool from the codebase -- here are the [instructions](https://github.com/microsoft/psi/wiki/Building-the-Codebase). The tool includes a number of visualizers for common data types.
+Our goal here is to inspect the data we just persisted and figure out a good `LogEnergy` value that separates speech from non-speech. We'll use the PsiStudio tool to do this. As PsiStudio does not currently ship as a binary, you will have to build the tool from the codebase -- here are the [instructions](https://github.com/microsoft/psi/wiki/Building-the-Codebase). The tool includes a number of visualizers for common data types.
 
 That data we've just persisted might show up in PsiStudio as follows:
 
 ![PsiStudio Visualization 1](Images/PsiStudio-1.png)
 
 In order to create a visualization like above:
-* Open the newly created store by clicking the __Open Store__ button and navigating to the newly created folder with your store. You can click any of the files in the folder, as PsiStudio will figure out that they all go together in comprising the store.
+* Open the newly created store by clicking the __Open Store__ button and navigating to the newly created folder with your store. You can click any of the files in the folder, as PsiStudio will figure out that they all go together to comprise the store.
 * You should see three streams in the __Datasets__ tab to the left: `Audio`, `LogEnergy`, and `ZeroCrossingRate`. Click and drag each of the streams from the left into the visualization container in the middle. Drag `Audio` into open space, drag `LogEnergy` into the open space below the audio visualization, and then drag `ZeroCrossingRate` _on top_ of the `LogEnergy` visualization.
 * The _Layout_ tab on the left-hand side shows the various panels and visualizers they each contain. You can click on any of the visualizers (or panels) and set various properties for it in the _Properties_ panel on the right-hand side. Select the `ZeroCrossingRate` visualizer in the _Layout_ tab and then change its color  in the _Properties_ tab to DimGray. Then select the `LogEnergy` visualizer and change its color to Orange.
 * Finally, in order to inspect the `LogEnergy` values in the bottom timeline panel, we need to turn on the legend by right-clicking the panel and selecting _Show Legend_. You will notice that as you move the time cursor left and right with the mouse, the legend automatically updates to show the value of the stream at the selected time. 
@@ -153,7 +140,7 @@ Before getting back to the code, it's important to note that PsiStudio lets you 
 
 ## Creating the VAD stream
 
-To create the voice activity stream, we're going to use another stream operator called `Select()` that allows us to transform a stream but applying a function to each message in the stream. Let's use a function that returns __true__ if the LogEnergy is greater than 7. We'll also persist the resulting boolean stream to the store under the name "VAD".
+To create the voice activity stream, we're going to use another stream operator called `Select()` that allows us to transform a stream by applying a function to each message in the stream. Let's use a function that returns __true__ if the LogEnergy is greater than 7. We'll also persist the resulting boolean stream to the store under the name "VAD".
 
 ```csharp
 // Create a voice-activity stream by thresholding the log energy
@@ -163,9 +150,9 @@ var vad = acousticFeaturesExtractor.LogEnergy
 vad.Write("VAD", store);
 ```
 
-To actually generate a VAD stream, we could either run the application live again and speak into the microphone as we did before, or we could use the powerful _replay_ functionality of \\psi to run this modified pipeline over the data we had already collected. This is an important strategy for these kinds of systems. We want to re-run many times in a row over the same data, iteractively adjusting and tuning parameters and observing how the application responds and performs.
+To actually generate a VAD stream, we could either run the application live again and speak into the microphone as we did before, or we could use the powerful _replay_ functionality of \\psi to run this modified pipeline over the data we had already collected. This is an important strategy for these kinds of systems. We often want to re-run many times in a row over the same data, iteratively adjusting and tuning parameters and observing how the application responds and performs.
 
-In this example, all we need to do is replace the line that creates the `microphone` stream from an `AudioCapture` component, to one that _reads_ the audio stream from the previously persisted store. This is accomplished with the `PsiStore.Open` method to open the store, with arguments specifying the pipeline object, the name of the store, and its location. We then use the `OpenStream<T>` method to open the stream of `AudioBuffer` called "Audio" that exists in the store.
+In this example, all we need to do is replace the line of code that creates the `microphone` stream from an `AudioCapture` component, to one that _reads_ the audio stream from the previously persisted store. This is accomplished first with the `PsiStore.Open` method to open the store, with arguments specifying the pipeline object, the name of the store, and its location. We then use the `OpenStream<T>` method to open the stream of `AudioBuffer` called "Audio" that exists in the store.
 
 ```csharp
 // Create the microphone, acoustic feature extractor, and connect them
@@ -184,15 +171,15 @@ Back in PsiStudio, we can open the newly created store that was just generated b
 
 ![PsiStudio Visualization 2](Images/PsiStudio-2.png)
 
-As we can see, the VAD signal seems to be mostly correct, but with many little fluctuations up and down corresponding to when the high-frequency and high-variance LogEnergy stream flickered across our boundary of 7.
+As we can see, the VAD signal seems to be mostly correct, but with many little fluctuations up and down corresponding to when the high-frequency, high-variance LogEnergy stream flickered across our boundary of 7.
 
-Let's try to filter out these fluctuations. The logic we'll aim for is to have the VAD signal switch from 0 to 1 only when it has been above the threshold for some span of time, and from 1 to 0 only when it has been below the threshold for a span of time. In order to determine how long that span of time should be, we'll need a rough estimate of the length of the fluctuations we're trying to filter out.
+Let's try to filter out these fluctuations. The logic we'll aim for is to have the VAD signal switch from __false__ to __true__ only when it has been above the threshold for some span of time, and from __true__ to __false__ only when it has been below the threshold for a span of time. In order to determine how long that span of time should be, we'll need a rough estimate of the length of the fluctuations we're trying to filter out.
 
 Let's use the scroll wheel to zoom closer into a segment of data. By clicking the three clock buttons at the top, we'll see some additional timing information above the data. Let's shift-left-click and shift-right-click to define the start and end points of an interval around one of the fluctuations:
 
 ![PsiStudio Visualization 3](Images/PsiStudio-3.png)
 
-As we can see from the timing information, the __Selection End__ relative to the __Selection Start__ is about 140 ms. This tells us that the selection is about 140 ms wide. To be safe, let's use a time span of 300 ms when deciding whether we can safely switch the VAD output from 0 to 1 or vice versa. Let's go back to the code.
+As we can see from the timing information, the __Selection End__ relative to the __Selection Start__ is about 140 ms. This tells us that the selection is about 140 ms wide. To be safe, let's use a time span of 300 ms when deciding whether we can safely switch the VAD output from __false__ to __true__ or vice versa. Let's go back to the code.
 
 ## Filtering the VAD signal
 
@@ -264,4 +251,4 @@ Let's open the newly created store, which if you've been following along exactly
 
 As you can see, this signal looks a lot better, albeit still not quite perfect. For example, the filgered VAD signal appears a bit shifted to the right of where the actual speaking is occuring, due to the 300 ms delay introduced by the filter. As mentioned at the beginning, this example has been a highly simplistic way to build a voice activity detector, whereas building one that is more accurate, robust, and reliable can get quite a bit more complicated. However, hopefully this small example gives you a good sense about what programming with \\psi is like, and how to visualize and replay over persisted data to iteratively tune your applications.
 
-For a more complex sample that will walk you through many other features of \\psi, you might be interested next in the [WhatIsThat]() sample.
+For a slightly more complex sample that will walk you through some of other important features of \\psi, such as data fusion and synchronization, check out the WebcamWithAudio samples ([Windows](https://github.com/microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) and [Linux](https://github.com/microsoft/psi-samples/tree/main/Samples/LinuxWebcamWithAudioSample) versions). Have fun!
