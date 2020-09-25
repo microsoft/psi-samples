@@ -6,17 +6,30 @@ Ensuring that this sample builds and runs correctly is a good way to verify that
 
 ## Setting up the project
 
-To build \\psi applications, we recommend using [Visual Studio 2019](https://www.visualstudio.com/vs/ "Visual Studio 2019") on Windows (the free, Community editions is sufficient). Under Linux, we recommend using [Visual Studio Code](https://code.visualstudio.com/). We will build this sample application using the available [\\psi Nuget packages](https://github.com/microsoft/psi/wiki/Using-via-NuGet-Packages). 
+To build \\psi applications, we recommend using [Visual Studio 2019](https://www.visualstudio.com/vs/ "Visual Studio 2019") on Windows (the free, Community Edition is sufficient). Under Linux, we recommend using [Visual Studio Code](https://code.visualstudio.com/). We will build this sample application using the available [\\psi Nuget packages](https://github.com/microsoft/psi/wiki/Using-via-NuGet-Packages). 
 
-Follow these steps to set up the Visual Studio project:
+### Steps for Windows
+
+Follow these steps to set up the Visual Studio project on Windows:
 
 1. First, create a simple .NET Core console app by going to _File -> New Project -> Visual C# -> Console App (.NET Core)_.
 
-2. Add a reference to the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure. You can do so by going to References (under your project), right-click, then _Manage NuGet Packages_, then go to _Browse_. Make sure the _Include prerelease_ checkbox is checked. Type in `Microsoft.Psi.Runtime` and install.
+2. Add a reference to the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure. You can do so by going to References (under your project), right-click, then _Manage NuGet Packages_, then go to _Browse_. Make sure the _Include prerelease_ checkbox is checked, as \\psi packages are still in beta, pre-release versions. Type in `Microsoft.Psi.Runtime` and install.
+
+### Steps for Linux
+
+In Linux, we'll will use the `dotnet` command-line tool to create the initial project and Program.cs, and add the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure:
+
+```bash
+$ dotnet new console -n HelloWorld && cd HelloWorld
+$ dotnet add package Microsoft.Psi.Runtime --version=0.13.32.2-beta
+```
+
+Note that due to an issue with NuGet, you'll need to specify the exact version of the NuGet package you wish to install, otherwise you will get a really old version. It's advised to specify the latest version that we have released.
 
 ## Creating a pipeline
 
-Let's begin writing the code by adding the neccesary `using` clauses at the top:
+Let's begin writing the code by adding the necessary `using` clauses at the top:
 
 ```csharp
 using System;
@@ -48,7 +61,9 @@ public static void Main()
 }
 ```
 
-You may notice that the `timer` variable we've just created has the type `IProducer<TimeSpan>`. This object type indicates that the component emits a stream of `TimeSpan` messages, in this case. In general, streams are of a generic type (you can have a stream of any type `T`) and are strongly typed, and therefore the connections between components are statically checked. All messages, regardless of type, are automatically timestamped at origin with an __originating time__.
+You may notice that the `timer` variable we've just created has the type `IProducer<TimeSpan>`. This object type indicates that the component emits a stream of `TimeSpan` messages, in this case. In general, streams are of a generic type (you can have a stream of any type `T`) and are strongly typed, and therefore the connections between components are statically checked.
+
+A critical aspect of all \\psi streams is that they are time-aware: timing information is carried along with the data on each stream, enabling both the developer and the runtime to correctly reason about the timing of the data. This time awareness enables proper synchronization and data fusion. Specifically, the way this works is that each message emitted by source components -- in this case the `Timer`, but would also apply to sensors like cameras and microphones -- is timestamped with an __originating time__ that captures when the data carried by the message occured in the real world.
 
 ## Adding a stream operator
 
@@ -78,7 +93,7 @@ Under the covers, each stream operator is backed by a component: in this case, t
 
 ## Running and disposing the pipeline
 
-Next we need to [execute the pipeline](https://github.com/microsoft/psi/wiki/Pipeline-Execution), which can be done in a few different ways. Calling `p.Run()` will tell the pipeline to execute until all components have completed sending messages, and this is a blocking call. Running this pipeline will cause the timer component to start generating messages, which in turn are processed by the `Do` operators. In this case, since the timer component will emit an infinite number of messages, the application would continue to run indefinitely until the application was killed by the user. Instead, we will use the asynchronous `p.RunAsync()` command, which will start executing the pipeline and then immediately return. We will then wait for the user to strike any key, upon which we gracefully shutdown the pipeline using `p.Dispose()`:
+Next we need to [execute the pipeline](https://github.com/microsoft/psi/wiki/Pipeline-Execution), which can be done in a few different ways. Calling `p.Run()` will tell the pipeline to execute until all components have completed sending messages. Running this pipeline will cause the timer component to start generating messages, which in turn are processed by the `Do` operators. In this case, since the timer component will emit an infinite number of messages, the application would continue to run indefinitely until the application was killed by the user. Instead, we will use the asynchronous, non-blocking `p.RunAsync()` command, which will start executing the pipeline and then immediately return. We will then wait for the user to strike any key, upon which we gracefully shutdown the pipeline using `p.Dispose()`:
 
 ```csharp
 public static void Main()
@@ -111,4 +126,4 @@ Try it out! Running this application should result in a "Hello World" message be
 
 ## Next steps
 
-For a more thorough introduction to \\psi, including topics on synchronization, data persistence and replay, and visualization, please see the [Brief Introduction](https://github.com/microsoft/psi/wiki/Brief-Introduction). For some slightly more complex (but still quite small) samples involving webcams and microphones, please refer to the cross-platform [SimpleVAD sample](https://github.com/Microsoft/psi-samples/tree/main/Samples/SimpleVoiceActivityDetector) and the WebcamWithAudio samples ([Windows](https://github.com/Microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) and [Linux](https://github.com/Microsoft/psi-samples/tree/main/Samples/LinuxWebcamWithAudioSample) versions).
+For a more thorough introduction to \\psi, including topics on synchronization, data persistence and replay, and visualization, please see the [Brief Introduction](https://github.com/microsoft/psi/wiki/Brief-Introduction). For some slightly more complex (but still quite small) samples involving capturing and processing video and audio data from webcams and microphones, please refer to the cross-platform [SimpleVAD sample](https://github.com/Microsoft/psi-samples/tree/main/Samples/SimpleVoiceActivityDetector) and the WebcamWithAudio samples ([Windows](https://github.com/Microsoft/psi-samples/tree/main/Samples/WebcamWithAudioSample) and [Linux](https://github.com/Microsoft/psi-samples/tree/main/Samples/LinuxWebcamWithAudioSample) versions).
