@@ -296,7 +296,7 @@ Let's now run the sample and look at some data. Setup the Azure Kinect device in
 
 We can now visualize the various streams collected, like below: 
 
-![PsiStudio Visualization](Images\WhatIsThatStep1.PNG)
+![PsiStudio Visualization](Images/WhatIsThatStep1.PNG)
 
 There are a few preliminary steps for creating this visualization. First, as PsiStudio does not currently ship as a binary, you will have to build the tool from the codebase -- here are the [instructions](https://github.com/microsoft/psi/wiki/Building-the-Codebase). 
 
@@ -429,7 +429,7 @@ var pointingLine = closestBody.GetPointingLine(azureKinect.DepthImage, calibrati
 
 Let's now run the application again, collect a new store with a couple of pointing gestures, and visualize again. If we open the new store in PsiStudio, we can now visualize the `Pointing.IsPointing` stream by simply dragging it at the bottom of the _Visualization_ canvas. We can also visualize the pointing line by dragging the `Pointing.PointingLine` stream over the 3D panel, or by first selecting that 3D panel and then right-click on the `Pointing.PointingLine` stream and selecting _Visualize as 3D Lines_
 
-![PsiStudio Visualization](Images\WhatIsThatStep2.PNG)
+![PsiStudio Visualization](Images/WhatIsThatStep2.PNG)
 
 You will notice that in the image capture above, we have also visualized the end-point of the pointing line, i.e. the location of the pointing target, as an orange sphere. You can accomplish this by using an interesting and powerful feature in PsiStudio, which lets you inspect/visualize sub-members of a stream (even though they were not separately persisted by the application on a separate stream.) To do so, right-click again on the `Pointing.PointingLine` stream in the _Datasets_ tab, and select _Expand Members_ from the context menu. With this command, PsiStudio does reflection over the underlying stream type, and expands all the public fields and properties of this type as 'sub-streams'. Since in this case the type of the `Pointing.PointingLine` stream is `Line3D?` (i.e., `Nullable<Line3D>`), two members are displayed: `Value` and `HasValue`, which are the members of the nullable type (if you are unfamiliar with nullable types, read more [here](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/nullable-value-types)). We are interested in the `Value`, which will be of type `Line3D`, and, to get to the end-point, we need to expand this further, which we can do by right-clicking `Value` and selecting _Expand Members_ again. This in turn expands the members of the `Line3D` underlying type, which include: `Direction`, `EndPoint`, `Length`, and `StartPoint`. The `EndPoint` can now be visualized by simply dragging it in the 3D panel, or right-click + _Visualize as 3D Points_. Finally, notice that I also changed the color of the `Pointing.PointingLine` stream visualizer to CoralBlue and the radius of the `EndPoint` visualizer to 4cm. Let's click the 'Save Layout' button again, to save this new layout.
 
