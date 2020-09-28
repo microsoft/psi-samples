@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "Samples\Hello
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleVoiceActivityDetector", "Samples\SimpleVoiceActivityDetector\SimpleVoiceActivityDetector.csproj", "{8B0801DB-206B-4930-9BC0-C052D6D7193A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhatIsThat", "Samples\WhatIsThat\WhatIsThat.csproj", "{98A72D32-7323-4ECF-B3C6-9496C1DBF1E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{8B0801DB-206B-4930-9BC0-C052D6D7193A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B0801DB-206B-4930-9BC0-C052D6D7193A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B0801DB-206B-4930-9BC0-C052D6D7193A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98A72D32-7323-4ECF-B3C6-9496C1DBF1E8}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{98A72D32-7323-4ECF-B3C6-9496C1DBF1E8}.Debug|Any CPU.Build.0 = Debug|x64
+		{98A72D32-7323-4ECF-B3C6-9496C1DBF1E8}.Release|Any CPU.ActiveCfg = Release|x64
+		{98A72D32-7323-4ECF-B3C6-9496C1DBF1E8}.Release|Any CPU.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +131,7 @@ Global
 		{C3C9D2E5-E99F-484B-9D96-AE2BD0EC1B0F} = {1AA38339-B349-4AA7-A0A9-F92ADCFDB2DF}
 		{C1168BBB-205A-4BCC-869F-C83AE204F12C} = {1AA38339-B349-4AA7-A0A9-F92ADCFDB2DF}
 		{8B0801DB-206B-4930-9BC0-C052D6D7193A} = {1AA38339-B349-4AA7-A0A9-F92ADCFDB2DF}
+		{98A72D32-7323-4ECF-B3C6-9496C1DBF1E8} = {1AA38339-B349-4AA7-A0A9-F92ADCFDB2DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EAF15EE9-DCC5-411B-A9E5-7C2F3D132331}
