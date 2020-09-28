@@ -7,6 +7,7 @@
     <CodeAnalysisRuleSet>../../Build/Sample.Psi.ruleset</CodeAnalysisRuleSet>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <StartupObject>WhatIsThat.Program</StartupObject>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
