@@ -159,7 +159,7 @@ namespace WhatIsThat
 
                         var intersection = DepthExtensions.IntersectLineWithDepthMesh(ci.DepthIntrinsics, line, di.Resource);
                         return intersection.HasValue ?
-                            new Line3D(endPoint, intersection.Value) :
+                            new Line3D(startPoint, intersection.Value) :
                             default;
                     }
                     else
@@ -190,12 +190,12 @@ namespace WhatIsThat
                     if (p.HasValue)
                     {
                         var point = ci.ToColorSpace(p.Value);
-                        var x = Math.Max(0, (int)point.X - 100);
-                        var y = Math.Max(0, (int)point.Y - 100);
-                        var width = Math.Min(si.Resource.Width - (int)point.X, 200);
-                        var height = Math.Min(si.Resource.Height - (int)point.Y, 200);
-                        var cropped = ImagePool.GetOrCreate(width, height, si.Resource.PixelFormat);
-                        si.Resource.Crop(cropped.Resource, x, y, width, height);
+                        var croppedWidth = Math.Min(si.Resource.Width, 200);
+                        var croppedHeight = Math.Min(si.Resource.Height, 200);
+                        var x = Math.Min(Math.Max(0, (int)point.X - 100), si.Resource.Width - croppedWidth);
+                        var y = Math.Min(Math.Max(0, (int)point.Y - 100), si.Resource.Height - croppedHeight);
+                        var cropped = ImagePool.GetOrCreate(croppedWidth, croppedHeight, si.Resource.PixelFormat);
+                        si.Resource.Crop(cropped.Resource, x, y, croppedWidth, croppedHeight);
                         return cropped;
                     }
                     else
