@@ -8,7 +8,7 @@ First we will build a simple class to talk to the Turtle sim, then we'll expose 
 
 ## ROS World
 
-Assuming you've [installed ROS](http://wiki.ros.org/lunar/Installation/Ubuntu) on a Linux VM, let's spin up the `turtlesim`:
+Assuming you've [installed ROS](http://wiki.ros.org/ROS/Installation) on a Linux VM, let's spin up the `turtlesim`:
 
 ```Shell
 # roscore &
