@@ -12,10 +12,10 @@ We will need a Linux machine running ROS (at the time of writing, ROS doesn't wo
 We'll set up a VM with COM port access to the arm, running an off-the-shelf ROS package.
 Then we'll develop against this from the Windows side.
 
-1) Download [Ubuntu 17.04 .iso image](https://www.ubuntu.com/download/desktop/thank-you?country=US&version=17.04&architecture=amd64)
+1) Download [Ubuntu .iso image](https://www.ubuntu.com/download/desktop/thank-you?country=US&version=17.04&architecture=amd64)
 2) Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (easier to configure COM ports than Hyper-V)
 3) Create VM running Ubuntu
-4) Install [ROS Lunar](http://wiki.ros.org/lunar/Installation/Ubuntu)
+4) Install [ROS](http://wiki.ros.org/ROS/Installation)
 5) Install [Aransena's `uarm_metal` ROS package](https://github.com/aransena/uarm_metal) and
    `rosrun uarm_metal uarm`
 
