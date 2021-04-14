@@ -13,7 +13,7 @@ namespace TurtleROSSample
     /// </summary>
     public class Program
     {
-        private const string RosSlave = "127.0.0.1"; // replace with your dev machine
+        private const string RosNode = "127.0.0.1"; // replace with your dev machine
         private const string RosMaster = "127.0.0.1"; // replace with your ROS machine
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace TurtleROSSample
         {
             using (var pipeline = Pipeline.Create())
             {
-                var turtle = new TurtleComponent(pipeline, new Turtle(RosSlave, RosMaster));
+                var turtle = new TurtleComponent(pipeline, new Turtle(RosNode, RosMaster));
                 turtle.PoseChanged.Do(p => Console.WriteLine($"x={p.Item1} y={p.Item2} theta={p.Item3}"));
                 var keys = Generators.Sequence(pipeline, Keys(), TimeSpan.FromMilliseconds(10));
                 keys.Select(k =>

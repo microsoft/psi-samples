@@ -12,10 +12,10 @@ namespace ArmControlROSSample
     /// </summary>
     public class Program
     {
-        private const string RosSlave = "127.0.0.1"; // replace with your dev machine
+        private const string RosNode = "127.0.0.1"; // replace with your dev machine
         private const string RosMaster = "127.0.0.1"; // replace with your ROS machine
 
-        private static UArm uarm = new UArm(RosSlave, RosMaster);
+        private static UArm uarm = new UArm(RosNode, RosMaster);
 
         /// <summary>
         /// Main entry point.

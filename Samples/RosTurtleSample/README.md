@@ -84,18 +84,18 @@ class Turtle
     private const string PoseTopic = "/turtle1/pose";
     private RosSubscriber.ISubscriber poseSubscriber;
 
-    private readonly string rosSlave;
+    private readonly string rosNode;
     private readonly string rosMaster;
 
-    public Turtle(string rosSlave, string rosMaster)
+    public Turtle(string rosNode, string rosMaster)
     {
-        this.rosSlave = rosSlave;
+        this.rosNode = rosNode;
         this.rosMaster = rosMaster;
     }
 
     public void Connect()
     {
-        this.node = new RosNode.Node(NodeName, this.rosSlave, this.rosMaster);
+        this.node = new RosNode.Node(NodeName, this.rosNode, this.rosMaster);
         this.cmdVelPublisher = node.CreatePublisher(RosMessageTypes.Geometry.Twist.Def, CmdVelTopic, false);
         this.poseSubscriber = node.Subscribe(this.PoseMessageDef, PoseTopic, PoseUpdate);
     }
@@ -223,14 +223,14 @@ Finally, to make use of our component, we make a very straightforward app to spe
 ```C#
 class Program
 {
-    private const string rosSlave = "127.0.0.1";
+    private const string rosNode = "127.0.0.1";
     private const string rosMaster = "127.0.0.1";
 
     static void Main(string[] args)
     {
         using (var pipeline = Pipeline.Create())
         {
-            var turtle = new TurtleComponent(pipeline, new Turtle(rosSlave, rosMaster));
+            var turtle = new TurtleComponent(pipeline, new Turtle(rosNode, rosMaster));
             turtle.PoseChanged.Do(p => Console.WriteLine($"x={p.Item1} y={p.Item2} theta={p.Item3}"));
             var keys = Generators.Sequence(pipeline, Keys(), TimeSpan.FromMilliseconds(10));
             keys.Select(k =>
@@ -268,7 +268,7 @@ Console keys are surfaced as an `IEnumerable` terminated when 'Q' is pressed.
 Similarly, the `turtle` component is stopped upon pressing 'Q'.
 With no components running the pipeline shuts down.
 
-Be sure to update the `rosSlave` (dev machine) and `rosMaster` (ROS machine) IP addresses as needed.
+Be sure to update the `rosNode` (dev machine) and `rosMaster` (ROS machine) IP addresses as needed.
 Use the actual IP address of the dev machine, because commands will not work if left as 127.0.0.1.
 Also, in the less common case that you run a distributed ROS system in which nodes are running on machines other than the ROS master, then you need to add hostname/IP mappings for these (e.g. `RosDns.add("my-hostname", "10.1.2.3")`).
 

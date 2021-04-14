@@ -87,9 +87,9 @@ class UArm
     private const string PumpTopic = "/uarm_metal/pump";
     private RosPublisher.IPublisher pumpPublisher;
 
-    public void Connect(string rosSlave, string rosMaster)
+    public void Connect(string rosNode, string rosMaster)
     {
-        this.node = new RosNode.Node(NodeName, rosSlave, rosMaster);
+        this.node = new RosNode.Node(NodeName, rosNode, rosMaster);
         this.pumpPublisher = node.CreatePublisher(RosMessageTypes.Standard.Bool.Def, PumpTopic, false);
     }
 
@@ -116,12 +116,12 @@ Our `Pump()` method merely publishes a bool.
 
 ### App
 
-The app will give a simple keyboard interface to a `UArm` instance. Obviously, replace the `rosSlave` and `rosMaster` IP addresses with your own.
+The app will give a simple keyboard interface to a `UArm` instance. Obviously, replace the `rosNode` and `rosMaster` IP addresses with your own.
 
 ```C#
 class Program
 {
-    private const string rosSlave = "127.0.0.1"; // replace with your dev machine
+    private const string rosNode = "127.0.0.1"; // replace with your dev machine
     private const string rosMaster = "127.0.0.1"; // replace with your ROS machine
 
     static void Main(string[] args)
@@ -131,7 +131,7 @@ class Program
         Console.WriteLine("P - Pump on/off");
         Console.WriteLine("Q - Quit");
 
-        var uarm = new UArm(rosSlave, rosMaster);
+        var uarm = new UArm(rosNode, rosMaster);
         uarm.Connect();
         var pump = false;
 
