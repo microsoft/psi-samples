@@ -20,8 +20,8 @@ namespace ArmControlROSSample
         private const string PositionReadTopic = "/uarm_metal/position_read";
         private const string PositionWriteTopic = "/uarm_metal/position_write";
 
-        private readonly string rosNode;
-        private readonly string rosMaster;
+        private readonly string rosNodeAddress;
+        private readonly string rosMasterAddress;
 
         private RosNode.Node node;
         private RosPublisher.IPublisher pumpPublisher;
@@ -57,12 +57,12 @@ namespace ArmControlROSSample
         /// <summary>
         /// Initializes a new instance of the <see cref="UArm"/> class.
         /// </summary>
-        /// <param name="rosNode">ROS node address.</param>
-        /// <param name="rosMaster">ROS master address.</param>
-        public UArm(string rosNode, string rosMaster)
+        /// <param name="rosNodeAddress">ROS node address.</param>
+        /// <param name="rosMasterAddress">ROS master address.</param>
+        public UArm(string rosNodeAddress, string rosMasterAddress)
         {
-            this.rosNode = rosNode;
-            this.rosMaster = rosMaster;
+            this.rosNodeAddress = rosNodeAddress;
+            this.rosMasterAddress = rosMasterAddress;
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace ArmControlROSSample
         /// </summary>
         public void Connect()
         {
-            this.node = new RosNode.Node(NodeName, this.rosNode, this.rosMaster);
+            this.node = new RosNode.Node(NodeName, this.rosNodeAddress, this.rosMasterAddress);
             this.pumpPublisher = this.node.CreatePublisher(RosMessageTypes.Standard.Bool.Def, PumpTopic, false);
             this.beepPublisher = this.node.CreatePublisher(this.beepMessageDef, BeepTopic, false);
             this.positionSubscriber = this.node.Subscribe(this.positionMessageDef, PositionReadTopic, this.PositionUpdate);

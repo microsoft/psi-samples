@@ -18,8 +18,8 @@ namespace TurtleROSSample
         private const string CmdVelTopic = "/turtle1/cmd_vel";
         private const string PoseTopic = "/turtle1/pose";
 
-        private readonly string rosNode;
-        private readonly string rosMaster;
+        private readonly string rosNodeAddress;
+        private readonly string rosMasterAddress;
 
         private RosNode.Node node;
         private RosPublisher.IPublisher cmdVelPublisher;
@@ -40,12 +40,12 @@ namespace TurtleROSSample
         /// <summary>
         /// Initializes a new instance of the <see cref="Turtle"/> class.
         /// </summary>
-        /// <param name="rosNode">ROS node address.</param>
-        /// <param name="rosMaster">ROS master address.</param>
-        public Turtle(string rosNode, string rosMaster)
+        /// <param name="rosNodeAddress">ROS node address.</param>
+        /// <param name="rosMasterAddress">ROS master address.</param>
+        public Turtle(string rosNodeAddress, string rosMasterAddress)
         {
-            this.rosNode = rosNode;
-            this.rosMaster = rosMaster;
+            this.rosNodeAddress = rosNodeAddress;
+            this.rosMasterAddress = rosMasterAddress;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace TurtleROSSample
         /// </summary>
         public void Connect()
         {
-            this.node = new RosNode.Node(NodeName, this.rosNode, this.rosMaster);
+            this.node = new RosNode.Node(NodeName, this.rosNodeAddress, this.rosMasterAddress);
             this.cmdVelPublisher = this.node.CreatePublisher(RosMessageTypes.Geometry.Twist.Def, CmdVelTopic, false);
             this.poseSubscriber = this.node.Subscribe(this.poseMessageDef, PoseTopic, this.PoseUpdate);
         }
