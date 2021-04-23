@@ -34,16 +34,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Psi.Audio" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Audio.Windows" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.CognitiveServices.Speech" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Imaging" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Imaging.Windows" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Kinect.Face.Windows.x64" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Kinect.Windows" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Speech" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Speech.Windows" Version="0.13.38.2-beta" />
+    <PackageReference Include="Microsoft.Psi.Audio" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Audio.Windows" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.CognitiveServices.Speech" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Imaging" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Imaging.Windows" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Kinect.Face.Windows.x64" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Kinect.Windows" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Speech" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Speech.Windows" Version="0.15.49.1-beta" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
