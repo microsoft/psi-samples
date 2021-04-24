@@ -32,8 +32,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Psi.ROS" Version="0.13.38.2-beta" />
-    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.13.38.2-beta" />
+    <PackageReference Include="Microsoft.Psi.ROS" Version="0.15.49.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.15.49.1-beta" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
   </ItemGroup>
 </Project>

@@ -108,7 +108,7 @@ namespace AzureKinectSample
                             var (x, y) = swap ? (j, i) : (i, j);
 
                             // subtract background beyond max depth
-                            var d = DepthExtensions.ProjectToCameraSpace(calib, new Point2D(x / scaleFactorWidth, y / scaleFactorHeight), depth);
+                            var d = CalibrationExtensions.ProjectToCameraSpace(calib, new Point2D(x / scaleFactorWidth, y / scaleFactorHeight), depth);
                             if (!d.HasValue || d.Value.Z < maxDepth)
                             {
                                 var p = bitmap.GetPixel(x, y);

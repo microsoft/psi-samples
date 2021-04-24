@@ -157,7 +157,7 @@ namespace WhatIsThat
                         var endPoint = handTip + direction.ScaleBy(0.3);
                         var line = new Line3D(startPoint, endPoint);
 
-                        var intersection = DepthExtensions.IntersectLineWithDepthMesh(ci.DepthIntrinsics, line, di.Resource);
+                        var intersection = CalibrationExtensions.IntersectLineWithDepthMesh(ci.DepthIntrinsics, line, di.Resource);
                         return intersection.HasValue ?
                             new Line3D(startPoint, intersection.Value) :
                             default;
