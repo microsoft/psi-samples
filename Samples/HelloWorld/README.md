@@ -12,9 +12,9 @@ To build \\psi applications, we recommend using [Visual Studio 2019](https://www
 
 Follow these steps to set up the Visual Studio project on Windows:
 
-1. First, create a simple .NET Core console app by going to _File -> New Project -> Visual C# -> Console App (.NET Core)_.
+1. First, create a simple .NET Core console app by launching Visual Studio, clicking "Create a new project," then "Console Application," naming your project, and selecting Target Framework as .NET Core (the version I used was .NET Core 3.1).
 
-2. Add a reference to the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure. You can do so by going to References (under your project), right-click, then _Manage NuGet Packages_, then go to _Browse_. Make sure the _Include prerelease_ checkbox is checked, as \\psi packages are still in beta, pre-release versions. Type in `Microsoft.Psi.Runtime` and install.
+2. Add a reference to the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure. You can do so by going to References (under your project), right-click, then _Manage NuGet Packages_, then go to _Browse_. Make sure the _Include prerelease_ checkbox is checked, as \\psi packages are still in beta, pre-release versions. Type in `Microsoft.Psi.Runtime` and install. Another option that worked for me is to drop down from "Project" on the menu bar and click "Manage NugGet Packages." Under Browse, search for Microsoft.Psi.Runtime and make sure to check off the Include prelease box. You will need to install packages using the same procedure for each new project.
 
 ### Steps for Linux
 
