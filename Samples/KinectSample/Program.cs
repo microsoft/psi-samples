@@ -114,34 +114,29 @@ namespace MultiModalSpeechDetection
                 });
 
                 // Create a stream of landmarks (points) from the face detector
-                var facePoints = new List<Tuple<System.Windows.Point, string>>();
-                var landmarks = kinectFaceDetector.Faces.Where(faces => faces.Count > 0).Select((List<Microsoft.Psi.Kinect.Face.KinectFace> list) =>
+                var facePoints = new System.Windows.Point[5];
+                var landmarks = kinectFaceDetector.Faces.Where(faces => faces.Count > 0).Select(faces =>
                 {
-                    facePoints.Clear();
-                    System.Windows.Point pt1 = new System.Windows.Point(
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.EyeLeft].X,
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.EyeLeft].Y);
-                    facePoints.Add(Tuple.Create(pt1, string.Empty));
+                    facePoints[0] = new System.Windows.Point(
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.EyeLeft].X,
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.EyeLeft].Y);
 
-                    System.Windows.Point pt2 = new System.Windows.Point(
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.EyeRight].X,
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.EyeRight].Y);
-                    facePoints.Add(Tuple.Create(pt2, string.Empty));
+                    facePoints[1] = new System.Windows.Point(
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.EyeRight].X,
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.EyeRight].Y);
 
-                    System.Windows.Point pt3 = new System.Windows.Point(
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.MouthCornerLeft].X,
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.MouthCornerLeft].Y);
-                    facePoints.Add(Tuple.Create(pt3, string.Empty));
+                    facePoints[2] = new System.Windows.Point(
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.MouthCornerLeft].X,
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.MouthCornerLeft].Y);
 
-                    System.Windows.Point pt4 = new System.Windows.Point(
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.MouthCornerRight].X,
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.MouthCornerRight].Y);
-                    facePoints.Add(Tuple.Create(pt4, string.Empty));
+                    facePoints[3] = new System.Windows.Point(
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.MouthCornerRight].X,
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.MouthCornerRight].Y);
 
-                    System.Windows.Point pt5 = new System.Windows.Point(
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.Nose].X,
-                            list[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.Nose].Y);
-                    facePoints.Add(Tuple.Create(pt5, string.Empty));
+                    facePoints[4] = new System.Windows.Point(
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.Nose].X,
+                            faces[0].FacePointsInColorSpace[Microsoft.Kinect.Face.FacePointType.Nose].Y);
+
                     return facePoints;
                 });
 
