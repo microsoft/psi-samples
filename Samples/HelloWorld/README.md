@@ -8,6 +8,20 @@ Ensuring that this sample builds and runs correctly is a good way to verify that
 
 To build \\psi applications, we recommend using [Visual Studio 2019](https://www.visualstudio.com/vs/ "Visual Studio 2019") on Windows (the free, Community Edition is sufficient). Under Linux, we recommend using [Visual Studio Code](https://code.visualstudio.com/). We will build this sample application using the available [\\psi Nuget packages](https://github.com/microsoft/psi/wiki/Using-via-NuGet-Packages). 
 
+### Setting up Visual Studio 2019
+
+To later be able to use PsiStudio, install Visual Studio with the following features:
+
+* Workloads:
+    * .NET desktop development
+    * .NET Core cross-platform development
+    * Desktop development with C++
+* Individual Components:
+    * MSVC v142 - VS 2019 C++ x64/x86 Spectre-mitigated libs (v14.xx, latest version)
+    * C++ ATL for latest v142 build tools with Spectre Mitigations (x86 & x64)
+    * Windows 10 SDK (10.0.18362.0)
+
+
 ### Steps for Windows
 
 Follow these steps to set up the Visual Studio project on Windows:
@@ -18,7 +32,7 @@ Follow these steps to set up the Visual Studio project on Windows:
 
 ### Steps for Linux
 
-In Linux, we'll will use the `dotnet` command-line tool to create the initial project and Program.cs, and add the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure:
+In Linux, we will use the `dotnet` command-line tool to create the initial project and Program.cs, and add the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure:
 
 ```bash
 $ dotnet new console -n HelloWorld && cd HelloWorld
@@ -26,6 +40,8 @@ $ dotnet add package Microsoft.Psi.Runtime --version=0.13.32.2-beta
 ```
 
 Note that due to an issue with NuGet, you'll need to specify the exact version of the NuGet package you wish to install, otherwise you will get a really old version. It's advised to specify the latest version that we have released.
+
+If there are problems in this step, check that dotnet-sdk is installed. Follow the instructions here: https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#2104-. Once fully set up with the NuGet packages, open the source folder in Visual Studio Code.  
 
 ## Creating a pipeline
 
@@ -123,6 +139,24 @@ public static void Main()
 ```
 
 Try it out! Running this application should result in a "Hello World" message being printed to the console every second. Striking any key will close the application.
+
+To build and run the application in either Windows or Linux for the first time, there may be additional steps.
+
+## Running program on Linux
+To run the program on Linux, make sure to save the program and navigate to the source folder on the terminal. Use the following command: 
+
+```bash
+$ dotnet run
+```
+
+To run the program from Visual Studio Code instead, install the C# for Visual Studio Code extension. From the tool bar, choose "Run without Debugging." This should automatically produce a launch.json file.
+
+Navigate to the launch.json file and change the console type to integratedTerminal. 
+
+```json
+"console": "integratedTerminal"
+```
+Run the program by dropping down from the Run option in the toolbar and choosing Run without Debugging.
 
 ## Next steps
 
