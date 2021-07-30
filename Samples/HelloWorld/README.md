@@ -140,16 +140,13 @@ public static void Main()
 
 Try it out! Running this application should result in a "Hello World" message being printed to the console every second. Striking any key will close the application.
 
-To build and run the application in either Windows or Linux for the first time, there may be additional steps.
-
 ## Running program on Linux
 To run the program on Linux, make sure to save the program and navigate to the source folder on the terminal. Use the following command: 
 
 ```bash
 $ dotnet run
 ```
-
-To run the program from Visual Studio Code instead, install the C# for Visual Studio Code extension. From the tool bar, choose "Run without Debugging." This should automatically produce a launch.json file.
+To run the program from Visual Studio Code, install the C# for Visual Studio Code extension. From the tool bar, choose "Run without Debugging." This should automatically produce a launch.json file.
 
 Navigate to the launch.json file and change the console type to integratedTerminal. 
 
