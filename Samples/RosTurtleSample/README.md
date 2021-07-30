@@ -4,7 +4,7 @@ In this sample, we'll create a simple console app to control the ROS TurtleSim.
 The sample itself will run under the Core CLR (Mac/Linux/Windows), but depends on ROS running under Linux.
 An overview of ROS and our ROS bridge is [covered in a separate document](https://github.com/microsoft/psi/wiki/ROS-Integration).
 
-First we will build a simple class to talk to the Turtle sim, then we'll expose this as a \psi component and will write a small app making use of it.
+First we will build a simple class to talk to the Turtle sim (Turtle.cs), then we'll expose this as a \psi component (TurtleComponent.cs) and will write a small app making use of it (Program.cs).
 
 ## ROS World
 
@@ -67,7 +67,7 @@ Since this is not a standard message type, we will need to define it ourselves i
 
 ## \psi World
 
-First, we'll create a console app and reference the `Microsoft.Psi` and `Microsoft.Ros` NuGet packages.
+First, we'll create a console app and reference the `Microsoft.Psi` and `Microsoft.Ros` NuGet packages. The ROS bridge from the Microsoft.Psi.ROS library allows creating ROS nodes using .NET possible, and it is only referenced within the ROS world (in Turtle.cs).
 The idea will be to create a class to communicate with the TurtleSim through ROS and expose a _classic_ interface.
 Then we'll create a \psi wrapper to expose a stream-oriented interface.
 Separating the logic from the \psi wrapper is a good idea.
@@ -108,7 +108,7 @@ class Turtle
 }
 ```
 
-The `RosNode.Node` represents our class as a "node" in the ROS world. It has a name and maintains bookkeeping of the set of publishers and subscribers.
+The `RosNode.Node` represents our class as a "node" in the ROS world.  It has a name and maintains bookkeeping of the set of publishers and subscribers.
 Notice that we can `CreatePublisher(...)` from a standard `Geometry.Twist` message definition already available in the library.
 However, to `Subscribe(...)` to the `PoseTopic` we need to provide our own `PoseMessageDef`:
 
