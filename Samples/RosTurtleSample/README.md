@@ -108,7 +108,7 @@ class Turtle
 }
 ```
 
-The `RosNode.Node` represents our class as a "node" in the ROS world.  It has a name and maintains bookkeeping of the set of publishers and subscribers.
+The `RosNode.Node` represents our class as a "node" in the ROS world. It has a name and maintains bookkeeping of the set of publishers and subscribers.
 Notice that we can `CreatePublisher(...)` from a standard `Geometry.Twist` message definition already available in the library.
 However, to `Subscribe(...)` to the `PoseTopic` we need to provide our own `PoseMessageDef`:
 
