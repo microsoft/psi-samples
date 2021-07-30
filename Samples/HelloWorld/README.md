@@ -39,7 +39,7 @@ $ dotnet new console -n HelloWorld && cd HelloWorld
 $ dotnet add package Microsoft.Psi.Runtime --version=0.13.32.2-beta
 ```
 
-Note that due to an issue with NuGet, you'll need to specify the exact version of the NuGet package you wish to install, otherwise you will get a really old version. It's advised to specify the latest version that we have released.
+Note that due to an issue with NuGet, you'll need to specify the exact version of the NuGet package you wish to install, otherwise you will get a really old version. It's advised to specify the latest version that we have released, which can be found on: https://www.nuget.org/.
 
 If there are problems in this step, check that dotnet-sdk is installed. Follow the instructions here: https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#2104-. Once fully set up with the NuGet packages, open the source folder in Visual Studio Code.  
 
