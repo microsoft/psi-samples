@@ -4,7 +4,7 @@ In this sample, we'll create a simple console app to control the ROS TurtleSim.
 The sample itself will run under the Core CLR (Mac/Linux/Windows), but depends on ROS running under Linux.
 An overview of ROS and our ROS bridge is [covered in a separate document](https://github.com/microsoft/psi/wiki/ROS-Integration).
 
-First we will build a simple class to talk to the Turtle sim, then we'll expose this as a \psi component and will write a small app making use of it.
+First we will build a simple class to talk to the Turtle sim (Turtle.cs), then we'll expose this as a \psi component (TurtleComponent.cs) and will write a small app making use of it (Program.cs).
 
 ## ROS World
 
@@ -67,7 +67,7 @@ Since this is not a standard message type, we will need to define it ourselves i
 
 ## \psi World
 
-First, we'll create a console app and reference the `Microsoft.Psi` and `Microsoft.Ros` NuGet packages.
+First, we'll create a console app and reference the `Microsoft.Psi` and `Microsoft.Ros` NuGet packages. The ROS bridge from the Microsoft.Psi.ROS library allows creating ROS nodes using .NET, and it is only referenced within the ROS world (in Turtle.cs).
 The idea will be to create a class to communicate with the TurtleSim through ROS and expose a _classic_ interface.
 Then we'll create a \psi wrapper to expose a stream-oriented interface.
 Separating the logic from the \psi wrapper is a good idea.
@@ -273,6 +273,26 @@ Use the actual IP address of the dev machine, because commands will not work if 
 Also, in the less common case that you run a distributed ROS system in which nodes are running on machines other than the ROS master, then you need to add hostname/IP mappings for these (e.g. `RosDns.add("my-hostname", "10.1.2.3")`).
 
 ![Turtle Drawing](Drawing.png)
+
+# Running on Linux
+To run the sample without starting from scratch, clone psi-samples by making a new directory and using git.
+
+```bash
+$ git clone http://github.com/microsoft/psi-samples 
+```
+Navigate to the RosTurtleSample via terminal and start up ROS master.
+
+```bash
+$ roscore &
+$ rosrun turtlesim turtlesim_node
+```
+A box for the turtle simulator should appear. After this step, control-T to a new tab on the terminal and install the Microsoft.Psi.ROS package and the Microsoft.Psi.Runtime package. The most recent versions can be found on: https://www.nuget.org/. Run the program using dotnet and control the turtle with the keys.
+
+```bash
+$ dotnet run
+```
+
+If an error occurs in this step, make sure that the simulator runs on NET Core 3.1. 
 
 ## Links
 

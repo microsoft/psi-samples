@@ -18,14 +18,16 @@ Follow these steps to set up the Visual Studio project on Windows:
 
 ### Steps for Linux
 
-In Linux, we'll will use the `dotnet` command-line tool to create the initial project and Program.cs, and add the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure:
+In Linux, we will use the `dotnet` command-line tool to create the initial project and Program.cs, and add the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure:
 
 ```bash
 $ dotnet new console -n HelloWorld && cd HelloWorld
 $ dotnet add package Microsoft.Psi.Runtime --version=0.13.32.2-beta
 ```
 
-Note that due to an issue with NuGet, you'll need to specify the exact version of the NuGet package you wish to install, otherwise you will get a really old version. It's advised to specify the latest version that we have released.
+Note that due to an issue with NuGet, you'll need to specify the exact version of the NuGet package you wish to install, otherwise you will get a really old version. It's advised to specify the latest version that we have released, which can be found on: https://www.nuget.org/.
+
+If there are problems in this step, check that dotnet-sdk is installed. Follow the instructions here: https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#2104-. Once fully set up with the NuGet packages, open the source folder in Visual Studio Code.  
 
 ## Creating a pipeline
 
@@ -123,6 +125,21 @@ public static void Main()
 ```
 
 Try it out! Running this application should result in a "Hello World" message being printed to the console every second. Striking any key will close the application.
+
+## Running program on Linux
+To run the program on Linux, make sure to save the program and navigate to the source folder on the terminal. Use the following command: 
+
+```bash
+$ dotnet run
+```
+To run the program from Visual Studio Code, install the C# for Visual Studio Code extension. From the tool bar, choose "Run without Debugging." This should automatically produce a launch.json file.
+
+Navigate to the launch.json file and change the console type to integratedTerminal. 
+
+```json
+"console": "integratedTerminal"
+```
+Run the program by dropping down from the Run option in the toolbar and choosing Run without Debugging.
 
 ## Next steps
 
