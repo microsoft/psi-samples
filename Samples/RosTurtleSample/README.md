@@ -67,7 +67,7 @@ Since this is not a standard message type, we will need to define it ourselves i
 
 ## \psi World
 
-First, we'll create a console app and reference the `Microsoft.Psi` and `Microsoft.Ros` NuGet packages. The ROS bridge from the Microsoft.Psi.ROS library allows creating ROS nodes using .NET possible, and it is only referenced within the ROS world (in Turtle.cs).
+First, we'll create a console app and reference the `Microsoft.Psi` and `Microsoft.Ros` NuGet packages. The ROS bridge from the Microsoft.Psi.ROS library allows creating ROS nodes using .NET, and it is only referenced within the ROS world (in Turtle.cs).
 The idea will be to create a class to communicate with the TurtleSim through ROS and expose a _classic_ interface.
 Then we'll create a \psi wrapper to expose a stream-oriented interface.
 Separating the logic from the \psi wrapper is a good idea.
