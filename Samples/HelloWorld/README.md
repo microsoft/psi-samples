@@ -8,20 +8,6 @@ Ensuring that this sample builds and runs correctly is a good way to verify that
 
 To build \\psi applications, we recommend using [Visual Studio 2019](https://www.visualstudio.com/vs/ "Visual Studio 2019") on Windows (the free, Community Edition is sufficient). Under Linux, we recommend using [Visual Studio Code](https://code.visualstudio.com/). We will build this sample application using the available [\\psi Nuget packages](https://github.com/microsoft/psi/wiki/Using-via-NuGet-Packages). 
 
-### Setting up Visual Studio 2019
-
-To later be able to use PsiStudio, install Visual Studio with the following features:
-
-* Workloads:
-    * .NET desktop development
-    * .NET Core cross-platform development
-    * Desktop development with C++
-* Individual Components:
-    * MSVC v142 - VS 2019 C++ x64/x86 Spectre-mitigated libs (v14.xx, latest version)
-    * C++ ATL for latest v142 build tools with Spectre Mitigations (x86 & x64)
-    * Windows 10 SDK (10.0.18362.0)
-
-
 ### Steps for Windows
 
 Follow these steps to set up the Visual Studio project on Windows:
