@@ -291,7 +291,7 @@ Notice that we use `Pair()` to fuse in the `Bodies` stream. The `Bodies` stream 
 
 We could use a tolerance `TimeSpan` as we did with the `Imu` stream, but `Join()` has an interesting side effect to consider. Generally before a joined message may be emitted, the _next_ messages outside of the tolerance window must first be seen to ensure that the _best_ match within the window has been chosen. This necessarily introduces some latency. With the high frequency `Imu` stream, this was fine. With the much lower frequency `Bodies` stream this would cause a significant delay. Instead of `Join()` we choose to use `Pair()` which will _immediately_ fuse the last body message (in wall clock time). No latency, but also no synchronicity or reproducibility guarantees. Reproducibility is the primary difference between `Join()` and `Pair()` as explained in more detail in the [synchronization tutorial.](https://github.com/microsoft/psi/wiki/Synchronization)
 
-Finally, we highlight each person's head with a red block; correlating the `Head` joint with the color image pixel coordinate using `ToColorSpace()`.
+Finally, we highlight each person's head with a red block; correlating the `Head` joint with the color image pixel coordinate using `TryGetPixelPosition()`.
 
 ```csharp
 // overlay head tracking
@@ -301,13 +301,15 @@ if (orientation == SensorOrientation.Default)
 	Console.BackgroundColor = ConsoleColor.Red;
 	foreach (var body in bodies)
 	{
-		var p = calib.ToColorSpace(body.Joints[JointId.Head].Pose.Origin);
-		var x = (int)(p.X * scaleFactorWidth);
-		var y = (int)(p.Y * scaleFactorHeight / 2);
-		if (x > 0 && x < widthOutput && y > 0 && y < heightOutput)
+		if (calib.TryGetPixelPosition(body.Joints[JointId.Head].Pose.Origin, out var p))
 		{
-			Console.SetCursorPosition(x, y / 2);
-			Console.Write(' ');
+			var x = (int)(p.X * scaleFactorWidth);
+			var y = (int)(p.Y * scaleFactorHeight / 2);
+			if (x > 0 && x < widthOutput && y > 0 && y < heightOutput)
+			{
+				Console.SetCursorPosition(x, y / 2);
+				Console.Write(' ');
+			}
 		}
 	}
 

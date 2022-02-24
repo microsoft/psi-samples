@@ -140,13 +140,15 @@ namespace AzureKinectSample
                         Console.BackgroundColor = ConsoleColor.Red;
                         foreach (var body in bodies)
                         {
-                            var p = calib.ToColorSpace(body.Joints[JointId.Head].Pose.Origin);
-                            var x = (int)(p.X * scaleFactorWidth);
-                            var y = (int)(p.Y * scaleFactorHeight / 2);
-                            if (x > 0 && x < widthOutput && y > 0 && y < heightOutput)
+                            if (calib.TryGetPixelPosition(body.Joints[JointId.Head].Pose.Origin, out var p))
                             {
-                                Console.SetCursorPosition(x, y / 2);
-                                Console.Write(' ');
+                                var x = (int)(p.X * scaleFactorWidth);
+                                var y = (int)(p.Y * scaleFactorHeight / 2);
+                                if (x > 0 && x < widthOutput && y > 0 && y < heightOutput)
+                                {
+                                    Console.SetCursorPosition(x, y / 2);
+                                    Console.Write(' ');
+                                }
                             }
                         }
 

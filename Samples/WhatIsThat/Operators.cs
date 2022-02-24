@@ -187,9 +187,8 @@ namespace WhatIsThat
                 .Select(tuple =>
                 {
                     (var p, var si, var ci) = tuple;
-                    if (p.HasValue)
+                    if (p.HasValue && ci.TryGetPixelPosition(p.Value, out var point, false))
                     {
-                        var point = ci.ToColorSpace(p.Value);
                         var croppedWidth = Math.Min(si.Resource.Width, 200);
                         var croppedHeight = Math.Min(si.Resource.Height, 200);
                         var x = Math.Min(Math.Max(0, (int)point.X - 100), si.Resource.Width - croppedWidth);
