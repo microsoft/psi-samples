@@ -1,0 +1,5 @@
+The recording of "Buzzing bees on the flowering plum" (Bees.wav) was made by Serg Childed, 06 MAY 2020 and taken from Wikimedia Commons under a Creative Commons license: https://commons.wikimedia.org/wiki/File:Buzzing_bees.ogg
+License: https://creativecommons.org/licenses/by-sa/4.0/
+
+Converted from Ogg to 1-channel, 48kHz, float32, WAVE format and trimmed to 10 seconds using FFMPEG (https://www.ffmpeg.org/):
+    ffmpeg -i Buzzing_bees.ogg -f wav -acodec pcm_f32le -ar 48000 -ac 1 -t 10 Bees.wav

@@ -456,9 +456,8 @@ internal static IProducer<Shared<Image>> GetProjectedCroppedImage(
         .Select(tuple =>
         {
             (var p, var si, var ci) = tuple;
-            if (p.HasValue)
+            if (p.HasValue && ci.TryGetPixelPosition(p.Value, out var point, false))
             {
-                var point = ci.ToColorSpace(p.Value);
                 var croppedWidth = Math.Min(si.Resource.Width, 200);
                 var croppedHeight = Math.Min(si.Resource.Height, 200);
                 var x = Math.Min(Math.Max(0, (int)point.X - 100), si.Resource.Width - croppedWidth);
@@ -475,7 +474,7 @@ internal static IProducer<Shared<Image>> GetProjectedCroppedImage(
 }
 ```
 
-This operator works over a stream of `Point3D?`, and produces an image, represented as a `Shared<Image>` (`Shared<>` is a construct that facilitates large object memory management in \\psi, you can [read more about it here](https://github.com/microsoft/psi/wiki/Shared-Objects)). Like the previous operator, it takes two additional parameters, in this case a stream of color images (containing the RGB camera images), and a stream containing the depth device calibration information. Again, the three streams are fused together in a tuple, and then the 3D point, when available, is projected into the image by using the `ToColorSpace()` API that's available on the `IDepthDeviceCalibrationInfo`. The depth device calibration info, contained in the `ci` variable has information about the intrinsics of the depth and color cameras, and about their relative spatial positions, which enables it to compute via this API the corresponding position in the 2D pixel space of the color camera of any given 3D point in the depth camera.
+This operator works over a stream of `Point3D?`, and produces an image, represented as a `Shared<Image>` (`Shared<>` is a construct that facilitates large object memory management in \\psi, you can [read more about it here](https://github.com/microsoft/psi/wiki/Shared-Objects)). Like the previous operator, it takes two additional parameters, in this case a stream of color images (containing the RGB camera images), and a stream containing the depth device calibration information. Again, the three streams are fused together in a tuple, and then the 3D point, when available, is projected into the image by using the `TryGetPixelPosition()` API that's available on the `IDepthDeviceCalibrationInfo`. The depth device calibration info, contained in the `ci` variable has information about the intrinsics of the depth and color cameras, and about their relative spatial positions, which enables it to compute via this API the corresponding position in the 2D pixel space of the color camera of any given 3D point in the depth camera.
 
 The next few lines compute the region to crop and create and return a cropped image. For more information on image processing in \\psi, see the [Imaging Overview](https://github.com/microsoft/psi/wiki/Imaging-Overview).
 
