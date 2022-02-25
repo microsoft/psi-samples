@@ -117,8 +117,10 @@ Global
 		{98A72D32-7323-4ECF-B3C6-9496C1DBF1E8}.Release|Any CPU.Build.0 = Release|x64
 		{DC4F833B-3996-4A42-AD9D-C24CD683C611}.Debug|Any CPU.ActiveCfg = Debug|ARM
 		{DC4F833B-3996-4A42-AD9D-C24CD683C611}.Debug|Any CPU.Build.0 = Debug|ARM
+		{DC4F833B-3996-4A42-AD9D-C24CD683C611}.Debug|Any CPU.Deploy.0 = Debug|ARM
 		{DC4F833B-3996-4A42-AD9D-C24CD683C611}.Release|Any CPU.ActiveCfg = Release|ARM
 		{DC4F833B-3996-4A42-AD9D-C24CD683C611}.Release|Any CPU.Build.0 = Release|ARM
+		{DC4F833B-3996-4A42-AD9D-C24CD683C611}.Release|Any CPU.Deploy.0 = Release|ARM
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

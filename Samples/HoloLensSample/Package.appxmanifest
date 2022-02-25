@@ -9,14 +9,14 @@
 
   <Identity
     Name="d4a18196-76b8-42ed-a2f8-b614dbace9bb"
-    Publisher="CN=ashleyf"
+    Publisher="CN=Microsoft"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="d4a18196-76b8-42ed-a2f8-b614dbace9bb" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>HoloLensSample</DisplayName>
-    <PublisherDisplayName>StereoKit</PublisherDisplayName>
+    <PublisherDisplayName>Platform for Situated Intelligence</PublisherDisplayName>
     <Logo>Assets\Logo\Logo-50.png</Logo>
   </Properties>
 
