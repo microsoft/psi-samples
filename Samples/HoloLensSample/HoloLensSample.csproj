@@ -61,14 +61,13 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Logo\Logo-150.png" />
-    <Content Include="Assets\Logo\Logo-16.png" />
-    <Content Include="Assets\Logo\Logo-310.png" />
-    <Content Include="Assets\Logo\Logo-44.png" />
-    <Content Include="Assets\Logo\Logo-50.png" />
-    <Content Include="Assets\Logo\Logo-71.png" />
-    <Content Include="Assets\Logo\Logo-Wide150.png" />
-    <Content Include="Assets\Logo\Logo-Wide300.png" />
+    <Content Include="Assets\Logo\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\Logo\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Logo\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Logo\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Logo\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\Logo\StoreLogo.png" />
+    <Content Include="Assets\Logo\Wide310x150Logo.scale-200.png" />
     <EmbeddedResource Include="Assets\Sounds\Bees.wav" />
     <Content Include="Assets\Sounds\BeesAttribution.txt" />
     <EmbeddedResource Include="Assets\Marker\Marker.glb" />
