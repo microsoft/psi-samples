@@ -21,8 +21,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Psi.Audio.Linux" Version="0.13.38.2-beta" Condition="'$(OS)'=='Unix'" />
-    <PackageReference Include="Microsoft.Psi.Audio.Windows" Version="0.16.92.1-beta" Condition="'$(OS)'!='Unix'" />
-    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.16.92.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Audio.Windows" Version="0.17.52.1-beta" Condition="'$(OS)'!='Unix'" />
+    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.17.52.1-beta" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
