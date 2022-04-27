@@ -13,7 +13,6 @@ namespace HoloLensSample
     using Microsoft.Psi;
     using Microsoft.Psi.Audio;
     using Microsoft.Psi.Data;
-    using Microsoft.Psi.Imaging;
     using Microsoft.Psi.MixedReality;
     using StereoKit;
     using Windows.Storage;

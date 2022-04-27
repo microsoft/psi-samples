@@ -88,11 +88,11 @@ var beePose = headPose.Select((head, env) =>
 });
 ```
 
-Finally, we'll use the `MeshStereoKitRenderer` component to render a sphere for representing the bee, and pass the bee's pose to it. We'll also pass the bee's position (rotation not needed) to the `SpatialSound` component we created earlier.
+Finally, we'll use the `MeshStereoKitRenderer` component to render a yellow sphere for representing the bee, and pass the bee's pose to it. We'll also pass the bee's position (rotation not needed) to the `SpatialSound` component we created earlier.
 
 ```csharp
 // Render the bee as a sphere.
-var sphere = new MeshStereoKitRenderer(pipeline, Mesh.GenerateSphere(0.1f));
+var sphere = new MeshStereoKitRenderer(pipeline, Mesh.GenerateSphere(0.1f), Color.Yellow);
 beePose.PipeTo(sphere.PoseInput);
 
 // Finally, pass the position (Point3D) of the bee to the spatial audio component.
