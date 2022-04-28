@@ -13,10 +13,10 @@ namespace HoloLensSample
     using Microsoft.Psi;
     using Microsoft.Psi.Audio;
     using Microsoft.Psi.Data;
-    using Microsoft.Psi.Imaging;
     using Microsoft.Psi.MixedReality;
     using StereoKit;
     using Windows.Storage;
+    using Color = System.Drawing.Color;
     using Microphone = Microsoft.Psi.MixedReality.Microphone;
 
     /// <summary>
@@ -27,8 +27,7 @@ namespace HoloLensSample
         /// <summary>
         /// Main entry point.
         /// </summary>
-        /// <returns>Async task.</returns>
-        public static async Task Main()
+        public static void Main()
         {
             // Initialize StereoKit
             if (!SK.Initialize(
@@ -42,7 +41,7 @@ namespace HoloLensSample
             }
 
             // Initialize MixedReality statics
-            await MixedReality.InitializeAsync();
+            MixedReality.InitializeAsync().GetAwaiter().GetResult();
 
             var demos = new (string Name, Func<bool, Pipeline> Run)[]
             {
@@ -65,7 +64,7 @@ namespace HoloLensSample
                 try
                 {
                     // Position the window near the head at the start
-                    var headPose = Input.Head.ToPsiCoordinateSystem();
+                    var headPose = Input.Head.ToCoordinateSystem();
 
                     if (windowCoordinateSystem == null)
                     {
@@ -77,7 +76,7 @@ namespace HoloLensSample
                     else
                     {
                         // Update to point toward the head
-                        windowCoordinateSystem = windowPose.ToPsiCoordinateSystem();
+                        windowCoordinateSystem = windowPose.ToCoordinateSystem();
                         windowCoordinateSystem = LookAtPoint(windowCoordinateSystem.Origin, headPose.Origin);
                     }
 
@@ -165,16 +164,24 @@ namespace HoloLensSample
         {
             var pipeline = Pipeline.Create(nameof(SceneUnderstandingDemo));
 
-            var mesh3DListRenderer = new Mesh3DListStereoKitRenderer(pipeline, wireframe: true);
-            var rectangle3DListRenderer = new Rectangle3DListStereoKitRenderer(pipeline, new CoordinateSystem(), System.Drawing.Color.Red);
             var sceneUnderstanding = new SceneUnderstanding(pipeline, new SceneUnderstandingConfiguration()
             {
                 ComputePlacementRectangles = true,
                 InitialPlacementRectangleSize = (0.5, 1.0),
             });
 
-            sceneUnderstanding.Select(s => s.World.Meshes).PipeTo(mesh3DListRenderer);
-            sceneUnderstanding.Select(s => s.Wall.PlacementRectangles).Select(rects => rects.Where(r => r.HasValue).Select(r => r.Value).ToList()).PipeTo(rectangle3DListRenderer);
+            var worldMeshes = sceneUnderstanding.Select(s => s.World.Meshes.ToArray());
+            var wallPlacementRectangles = sceneUnderstanding
+                .Select(s => s.Wall.PlacementRectangles)
+                .Select(rects => rects.Where(r => r.HasValue).Select(r => r.Value).ToArray());
+
+            worldMeshes.Parallel(
+                s => s.PipeTo(new Mesh3DStereoKitRenderer(s.Out.Pipeline, Color.White, true)),
+                name: "RenderWorldMeshes");
+
+            wallPlacementRectangles.Parallel(
+                s => s.PipeTo(new Rectangle3DStereoKitRenderer(s.Out.Pipeline, Color.Red)),
+                name: "RenderPlacementRectangles");
 
             if (persistStreamsToStore)
             {
@@ -199,7 +206,7 @@ namespace HoloLensSample
             var markerScale = 0.4f;
             var initialMarkerPose = CoordinateSystem.Translation(new Vector3D(1, 0, -0.3));
             var markerMesh = MeshStereoKitRenderer.CreateMeshFromEmbeddedResource("HoloLensSample.Assets.Marker.Marker.glb");
-            var markerRenderer = new MeshStereoKitRenderer(pipeline, markerMesh, initialMarkerPose, new Vector3D(markerScale, markerScale, markerScale), System.Drawing.Color.LightBlue);
+            var markerRenderer = new MeshStereoKitRenderer(pipeline, markerMesh, initialMarkerPose, new Vector3D(markerScale, markerScale, markerScale), Color.LightBlue);
 
             // handle to move marker
             var handleBounds = new Vector3D(
@@ -217,7 +224,7 @@ namespace HoloLensSample
             var markerPose = spin.Join(handle, RelativeTimeInterval.Infinite)
                 .Select(m => m.Item1.TransformBy(m.Item2));
 
-            markerPose.PipeTo(markerRenderer.PoseInput);
+            markerPose.PipeTo(markerRenderer.Pose);
 
             if (persistStreamsToStore)
             {
@@ -264,8 +271,8 @@ namespace HoloLensSample
             });
 
             // Render the bee as a sphere.
-            var sphere = new MeshStereoKitRenderer(pipeline, Mesh.GenerateSphere(0.1f));
-            beePose.PipeTo(sphere.PoseInput);
+            var sphere = new MeshStereoKitRenderer(pipeline, Mesh.GenerateSphere(0.1f), Color.Yellow);
+            beePose.PipeTo(sphere.Pose);
 
             // Finally, pass the position (Point3D) of the bee to the spatial audio component.
             var beePosition = beePose.Select(b => b.Origin);
@@ -311,19 +318,12 @@ namespace HoloLensSample
                     PreviewStreamSettings = new () { FrameRate = 15, ImageWidth = 896, ImageHeight = 504, MixedRealityCapture = new () },
                 });
 
-            camera.VideoImage.Encode(new ImageToJpegStreamEncoder(0.9), DeliveryPolicy.LatestMessage)
-                .Join(camera.VideoIntrinsics)
-                .Join(camera.VideoPose)
-                .Write("VideoCameraView", store, true);
-
-            camera.PreviewImage.Encode(new ImageToJpegStreamEncoder(0.9), DeliveryPolicy.LatestMessage)
-                .Join(camera.PreviewIntrinsics)
-                .Join(camera.PreviewPose)
-                .Write("PreviewCameraView", store, true);
+            camera.VideoEncodedImageCameraView.Write("VideoEncodedImageCameraView", store, true);
+            camera.PreviewEncodedImageCameraView.Write("PreviewEncodedImageCameraView", store, true);
 
             // Depth camera (long throw)
             var depthCamera = new DepthCamera(pipeline);
-            depthCamera.DepthImage.Join(depthCamera.CameraIntrinsics).Join(depthCamera.Pose).Write("DepthCameraView", store, true);
+            depthCamera.DepthImageCameraView.Write("DepthImageCameraView", store, true);
 
             return store;
         }

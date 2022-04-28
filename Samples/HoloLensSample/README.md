@@ -88,11 +88,11 @@ var beePose = headPose.Select((head, env) =>
 });
 ```
 
-Finally, we'll use the `MeshStereoKitRenderer` component to render a sphere for representing the bee, and pass the bee's pose to it. We'll also pass the bee's position (rotation not needed) to the `SpatialSound` component we created earlier.
+Finally, we'll use the `MeshStereoKitRenderer` component to render a yellow sphere for representing the bee, and pass the bee's pose to it. We'll also pass the bee's position (rotation not needed) to the `SpatialSound` component we created earlier.
 
 ```csharp
 // Render the bee as a sphere.
-var sphere = new MeshStereoKitRenderer(pipeline, Mesh.GenerateSphere(0.1f));
+var sphere = new MeshStereoKitRenderer(pipeline, Mesh.GenerateSphere(0.1f), Color.Yellow);
 beePose.PipeTo(sphere.PoseInput);
 
 // Finally, pass the position (Point3D) of the bee to the spatial audio component.
@@ -122,6 +122,8 @@ hands.Left.Write("Hands.Left", store);
 hands.Right.Write("Hands.Right", store);
 ```
 
-Here's an example visualization in Psi Studio of streams persisted by the "Bees Demo":
+Note: The visualizer for hand tracking data is defined in `Microsoft.Psi.MixedReality.Visualization.Windows`. Follow the instructions for [3rd Party Visualizers](https://github.com/microsoft/psi/wiki/3rd-Party-Visualizers) to add this project's assembly to `PsiStudioSettings.xml` in order to visualize hands in PsiStudio. 
+
+Here's an example visualization of streams persisted by the "Bees Demo":
 
 ![Bees Demo Visualization](Images/BeesDemoPsiStudio.png)
