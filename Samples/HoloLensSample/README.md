@@ -122,7 +122,7 @@ hands.Left.Write("Hands.Left", store);
 hands.Right.Write("Hands.Right", store);
 ```
 
-Note: The visualizer for hand tracking data is defined in `Microsoft.Psi.MixedReality.Visualization.Windows`. Follow the instructions for [3rd Party Visualizers](https://github.com/microsoft/psi/wiki/3rd-Party-Visualizers) to add this project's assembly to `PsiStudioSettings.xml` in order to visualize hands in PsiStudio. 
+Note: The visualizer for hand tracking data is defined in `Microsoft.Psi.MixedReality.Visualization.Windows`. The visualizers for 3D depth and image camera views are defined in `Microsoft.Psi.Spatial.Euclidean.Visualization.Windows`. Follow the instructions for [3rd Party Visualizers](https://github.com/microsoft/psi/wiki/3rd-Party-Visualizers) to add those projects' assemblies to `PsiStudioSettings.xml` in order to visualize 3D hands and camera views in PsiStudio. 
 
 Here's an example visualization of streams persisted by the "Bees Demo":
 
