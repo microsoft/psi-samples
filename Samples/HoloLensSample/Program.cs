@@ -14,10 +14,13 @@ namespace HoloLensSample
     using Microsoft.Psi.Audio;
     using Microsoft.Psi.Data;
     using Microsoft.Psi.MixedReality;
+    using Microsoft.Psi.MixedReality.MediaCapture;
+    using Microsoft.Psi.MixedReality.ResearchMode;
+    using Microsoft.Psi.MixedReality.StereoKit;
     using StereoKit;
     using Windows.Storage;
     using Color = System.Drawing.Color;
-    using Microphone = Microsoft.Psi.MixedReality.Microphone;
+    using Microphone = Microsoft.Psi.MixedReality.StereoKit.Microphone;
 
     /// <summary>
     /// HoloLens samples.
@@ -41,7 +44,7 @@ namespace HoloLensSample
             }
 
             // Initialize MixedReality statics
-            MixedReality.InitializeAsync().GetAwaiter().GetResult();
+            MixedReality.Initialize();
 
             var demos = new (string Name, Func<bool, Pipeline> Run)[]
             {
@@ -176,11 +179,11 @@ namespace HoloLensSample
                 .Select(rects => rects.Where(r => r.HasValue).Select(r => r.Value).ToArray());
 
             worldMeshes.Parallel(
-                s => s.PipeTo(new Mesh3DStereoKitRenderer(s.Out.Pipeline, Color.White, true)),
+                s => s.PipeTo(new Mesh3DRenderer(s.Out.Pipeline, Color.White, true)),
                 name: "RenderWorldMeshes");
 
             wallPlacementRectangles.Parallel(
-                s => s.PipeTo(new Rectangle3DStereoKitRenderer(s.Out.Pipeline, Color.Red)),
+                s => s.PipeTo(new Rectangle3DRenderer(s.Out.Pipeline, Color.Red)),
                 name: "RenderPlacementRectangles");
 
             if (persistStreamsToStore)
@@ -205,8 +208,8 @@ namespace HoloLensSample
             // Instantiate the marker renderer (starting pose of 1 meter forward, 30cm down).
             var markerScale = 0.4f;
             var initialMarkerPose = CoordinateSystem.Translation(new Vector3D(1, 0, -0.3));
-            var markerMesh = MeshStereoKitRenderer.CreateMeshFromEmbeddedResource("HoloLensSample.Assets.Marker.Marker.glb");
-            var markerRenderer = new MeshStereoKitRenderer(pipeline, markerMesh, initialMarkerPose, new Vector3D(markerScale, markerScale, markerScale), Color.LightBlue);
+            var markerMesh = MeshRenderer.CreateMeshFromEmbeddedResource("HoloLensSample.Assets.Marker.Marker.glb");
+            var markerRenderer = new MeshRenderer(pipeline, markerMesh, initialMarkerPose, new Vector3D(markerScale, markerScale, markerScale), Color.LightBlue);
 
             // handle to move marker
             var handleBounds = new Vector3D(
@@ -271,7 +274,7 @@ namespace HoloLensSample
             });
 
             // Render the bee as a sphere.
-            var sphere = new MeshStereoKitRenderer(pipeline, Mesh.GenerateSphere(0.1f), Color.Yellow);
+            var sphere = new MeshRenderer(pipeline, Mesh.GenerateSphere(0.1f), Color.Yellow);
             beePose.PipeTo(sphere.Pose);
 
             // Finally, pass the position (Point3D) of the bee to the spatial audio component.
