@@ -85,24 +85,24 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.12" />
     <PackageReference Include="Microsoft.Psi.Audio">
-      <Version>0.17.52.1-beta</Version>
+      <Version>0.18.72.1-beta</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Psi.Imaging">
-      <Version>0.17.52.1-beta</Version>
+      <Version>0.18.72.1-beta</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Psi.MixedReality">
-      <Version>0.17.52.1-beta</Version>
+      <Version>0.18.72.1-beta</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Psi.MixedReality.UniversalWindows">
-      <Version>0.17.52.1-beta</Version>
+      <Version>0.18.72.1-beta</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Psi.Runtime">
-      <Version>0.17.52.1-beta</Version>
+      <Version>0.18.72.1-beta</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Psi.Spatial.Euclidean">
-      <Version>0.17.52.1-beta</Version>
+      <Version>0.18.72.1-beta</Version>
     </PackageReference>
-    <PackageReference Include="StereoKit" Version="0.3.5" />
+    <PackageReference Include="StereoKit" Version="0.3.6" />
     <PackageReference Include="StyleCop.Analyzers">
       <Version>1.1.118</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -33,12 +33,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Kinect.Sensor" Version="1.4.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Psi.AzureKinect.x64" Version="0.17.52.1-beta" />
-    <PackageReference Include="Microsoft.Psi.Calibration" Version="0.17.52.1-beta" />
+    <PackageReference Include="Microsoft.Psi.AzureKinect.x64" Version="0.18.72.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Calibration" Version="0.18.72.1-beta" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

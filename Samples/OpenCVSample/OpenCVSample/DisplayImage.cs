@@ -15,6 +15,7 @@ namespace Microsoft.Psi.Samples.OpenCV
     /// </summary>
     public class DisplayImage : INotifyPropertyChanged
     {
+        private readonly object syncRoot = new object();
         private Shared<Imaging.Image> psiImage;
         private FrameCounter renderedFrames = new FrameCounter();
         private FrameCounter receivedFrames = new FrameCounter();
@@ -85,7 +86,7 @@ namespace Microsoft.Psi.Samples.OpenCV
         /// <param name="dispImage">The image to display.</param>
         public void UpdateImage(Shared<Imaging.Image> dispImage)
         {
-            lock (this)
+            lock (this.syncRoot)
             {
                 this.receivedFrames.Increment();
                 this.psiImage?.Dispose();
@@ -102,7 +103,7 @@ namespace Microsoft.Psi.Samples.OpenCV
         {
             if (this.psiImage != null && this.psiImage.Resource != null)
             {
-                lock (this)
+                lock (this.syncRoot)
                 {
                     if (this.Image == null
                             || this.Image.PixelWidth != this.psiImage.Resource.Width
