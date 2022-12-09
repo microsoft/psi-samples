@@ -390,15 +390,14 @@ internal static IProducer<Line3D?> GetPointingLine(
                 // by advancing 20 cm in the space forward from the hand-tip, in the pointing
                 // direction. The end point of the line is set by advancing 30 cm in the space
                 // forward from the hand-tip, in the pointing direction. The
-                // DepthExtensions.IntersectLineWithDepthMesh API advances forward on this line,
+                // CalibrationExtensions.ComputeRayIntersection API advances forward on this line,
                 // from the start point, until it hits the mesh. We do not start the line right
                 // at the hand-tip to avoid having an intersection with the mesh around the hand.
                 var direction = (handTip - head).Normalize();
                 var startPoint = handTip + direction.ScaleBy(0.2);
-                var endPoint = handTip + direction.ScaleBy(0.3);
-                var line = new Line3D(startPoint, endPoint);
+                var ray = new Ray3D(startPoint, direction);
 
-                var intersection = DepthExtensions.IntersectLineWithDepthMesh(ci.DepthIntrinsics, line, di.Resource);
+                var intersection = di.Resource.ComputeRayIntersection(ci.DepthIntrinsics, ray);
                 return intersection.HasValue ?
                     new Line3D(startPoint, intersection.Value) :
                     default;

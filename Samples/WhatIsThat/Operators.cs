@@ -154,9 +154,7 @@ namespace WhatIsThat
                         // at the hand-tip to avoid having an intersection with the mesh around the hand.
                         var direction = (handTip - head).Normalize();
                         var startPoint = handTip + direction.ScaleBy(0.2);
-                        var endPoint = handTip + direction.ScaleBy(0.3);
-                        var line = new Line3D(startPoint, endPoint);
-                        var ray = new Ray3D(line.StartPoint, line.Direction);
+                        var ray = new Ray3D(startPoint, direction);
 
                         var intersection = di.Resource.ComputeRayIntersection(ci.DepthIntrinsics, ray);
                         return intersection.HasValue ?
