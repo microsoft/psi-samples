@@ -24,7 +24,7 @@ As indicated in the last column in the table below, some of the samples have a c
 
 # Building
 
-To build the samples, you will need to install [Visual Studio 2019](https://visualstudio.microsoft.com/vs/) with the .NET desktop development workload on Windows, or [.NET Core 3.1](https://docs.microsoft.com/en-us/dotnet/core/install/linux) on Linux. Some samples may have additional prerequisites. Please see the README of each individual sample for more information.
+To build the samples, you will need to install [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) with the .NET desktop development workload on Windows, or [.NET Core 3.1](https://docs.microsoft.com/en-us/dotnet/core/install/linux) on Linux. Some samples may have additional prerequisites. Please see the README of each individual sample for more information.
 
 # Contributing
 
