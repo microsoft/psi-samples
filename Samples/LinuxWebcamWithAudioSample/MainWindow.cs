@@ -17,10 +17,10 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
     /// </summary>
     public class MainWindow : Gtk.Window
     {
+        private readonly Gtk.Image displayImage;
+        private readonly Gtk.Label displayText;
+        private readonly Gtk.LevelBar displayLevel;
         private Pipeline pipeline;
-        private Gtk.Image displayImage;
-        private Gtk.Label displayText;
-        private Gtk.LevelBar displayLevel;
         private byte[] imageData = new byte[640 * 480 * 3];
 
         /// <summary>
@@ -44,6 +44,20 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
             // window event handlers
             this.Shown += this.MainWindow_Shown;
             this.DeleteEvent += this.MainWindow_DeleteEvent;
+        }
+
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.pipeline?.Dispose();
+                this.displayImage?.Dispose();
+                this.displayText?.Dispose();
+                this.displayLevel?.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
 
         private void MainWindow_Shown(object sender, EventArgs e)
@@ -111,6 +125,7 @@ namespace Microsoft.Psi.Samples.LinuxWebcamWithAudioSample
         private void MainWindow_DeleteEvent(object o, Gtk.DeleteEventArgs args)
         {
             this.pipeline.Dispose();
+            this.pipeline = null;
         }
     }
 }
