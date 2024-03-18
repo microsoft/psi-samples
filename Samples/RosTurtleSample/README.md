@@ -292,7 +292,7 @@ A box for the turtle simulator should appear. After this step, control-T to a ne
 $ dotnet run
 ```
 
-If an error occurs in this step, make sure that the simulator runs on NET Core 3.1. 
+If an error occurs in this step, make sure that the simulator runs on the version of .NET that you have installed. 
 
 ## Links
 

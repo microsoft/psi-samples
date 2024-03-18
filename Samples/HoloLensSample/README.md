@@ -26,10 +26,10 @@ Follow [these steps to install required mixed reality build tools](https://docs.
 * Workload:
   * _Universal Windows Platform (UWP) development_
 * Individual components:
-  * _MSVC v142 - VS 2019 C++ ARM64 build tools (v14.27)_
-  * _C++ Universal Windows Platform support for v142 build tools (ARM64)_
+  * _MSVC v143 - VS 2022 C++ ARM64 build tools (Latest)_
+  * _C++ Universal Windows Platform support for v143 build tools (ARM64)_
 
-NOTE: Later on, Visual Studio may at some point prompt you to also install the _C++ (v142) Universal Windows Platform tools_. Go ahead and install them when prompted.
+NOTE: Later on, Visual Studio may at some point prompt you to also install the _C++ (v143) Universal Windows Platform tools_. Go ahead and install them when prompted.
 
 ### Deploying and Running
 

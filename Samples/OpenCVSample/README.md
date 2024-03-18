@@ -14,4 +14,4 @@ You will also need to modify your Visual Studio installation to add the followin
 * Workloads:
   * __Desktop development with C++__
 * Individual Components
-  * __MSVC v142 - VS 2019 C++ x64/x86 Spectre-mitigated libs (v14.xx, latest version)__
+  * __MSVC v143 - VS 2022 C++ x64/x86 Spectre-mitigated libs (Latest)__

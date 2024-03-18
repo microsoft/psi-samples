@@ -6,13 +6,13 @@ Ensuring that this sample builds and runs correctly is a good way to verify that
 
 ## Setting up the project
 
-To build \\psi applications, we recommend using [Visual Studio 2019](https://www.visualstudio.com/vs/ "Visual Studio 2019") on Windows (the free, Community Edition is sufficient). Under Linux, we recommend using [Visual Studio Code](https://code.visualstudio.com/). We will build this sample application using the available [\\psi Nuget packages](https://github.com/microsoft/psi/wiki/Using-via-NuGet-Packages). 
+To build \\psi applications, we recommend using [Visual Studio 2022](https://www.visualstudio.com/vs/ "Visual Studio 2022") on Windows (the free, Community Edition is sufficient). Under Linux, we recommend using [Visual Studio Code](https://code.visualstudio.com/). We will build this sample application using the available [\\psi Nuget packages](https://github.com/microsoft/psi/wiki/Using-via-NuGet-Packages). 
 
 ### Steps for Windows
 
 Follow these steps to set up the Visual Studio project on Windows:
 
-1. First, create a simple .NET Core console app by launching Visual Studio and clicking "Create a new project" (or if you already have a solution open in Visual Studio, go to _File -> New -> Project_). Select "Console Application (C#)," name your project, and select the Target Framework as .NET Core 3.1 (although 5.0 should also work).
+1. First, create a simple .NET console app by launching Visual Studio and clicking "Create a new project" (or if you already have a solution open in Visual Studio, go to _File -> New -> Project_). Select "Console App (C#)," name your project, and select the Target Framework (e.g. .NET 8.0).
 
 2. Add a reference to the `Microsoft.Psi.Runtime` NuGet package that contains the core Platform for Situated Intelligence infrastructure. You can do so by right-clicking on the project in the Solution Explorer (or clicking "Project" in the menu bar at the top) and selecting _Manage NuGet Packages_, then go to _Browse_. Make sure the _Include prerelease_ checkbox is checked, as \\psi packages are still in beta, pre-release versions. Type in `Microsoft.Psi.Runtime` and install.
 
@@ -22,12 +22,12 @@ In Linux, we will use the `dotnet` command-line tool to create the initial proje
 
 ```bash
 $ dotnet new console -n HelloWorld && cd HelloWorld
-$ dotnet add package Microsoft.Psi.Runtime --version=0.13.32.2-beta
+$ dotnet add package Microsoft.Psi.Runtime --version=0.19.100.1-beta
 ```
 
 Note that due to an issue with NuGet, you'll need to specify the exact version of the NuGet package you wish to install, otherwise you will get a really old version. It's advised to specify the latest version that we have released, which can be found on: https://www.nuget.org/.
 
-If there are problems in this step, check that dotnet-sdk is installed. Follow the instructions here: https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#2104-. Once fully set up with the NuGet packages, open the source folder in Visual Studio Code.  
+If there are problems in this step, check that dotnet-sdk is installed. Follow the instructions here: https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu. Once fully set up with the NuGet packages, open the source folder in Visual Studio Code.  
 
 ## Creating a pipeline
 

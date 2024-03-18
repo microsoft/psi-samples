@@ -16,7 +16,7 @@ If anything is unclear in the walkthrough below, or if you find an error, please
 
 ## Setting up the project
 
-To build \\psi applications, we recommend using [Visual Studio 2019](https://www.visualstudio.com/vs/ "Visual Studio 2019") on Windows (the free, Community Edition is sufficient). Under Linux, we recommend using [Visual Studio Code](https://code.visualstudio.com/). We will build this sample application using the available [\\psi Nuget packages](https://github.com/microsoft/psi/wiki/Using-via-NuGet-Packages). 
+To build \\psi applications, we recommend using [Visual Studio 2022](https://www.visualstudio.com/vs/ "Visual Studio 2022") on Windows (the free, Community Edition is sufficient). Under Linux, we recommend using [Visual Studio Code](https://code.visualstudio.com/). We will build this sample application using the available [\\psi Nuget packages](https://github.com/microsoft/psi/wiki/Using-via-NuGet-Packages). 
 
 ### Steps for Windows
 
@@ -37,8 +37,8 @@ In Linux, we'll will use the `dotnet` command-line tool to create the initial pr
 The commands are:
 ```bash
 $ dotnet new console -n SimpleVoiceActivityDetector && cd SimpleVoiceActivityDetector
-$ dotnet add package Microsoft.Psi.Runtime --version=0.13.32.2-beta
-$ dotnet add package Microsoft.Psi.Audio.Linux --version=0.13.32.2-beta
+$ dotnet add package Microsoft.Psi.Runtime --version=0.19.100.1-beta
+$ dotnet add package Microsoft.Psi.Audio.Linux --version=0.19.100.1-beta
 ```
 
 Note that due to an issue with NuGet, you'll need to specify the exact version of the NuGet package you wish to install, otherwise you will get a really old version. It's advised to specify the latest version that we have released.
