@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <CodeAnalysisRuleSet>../../Build/Sample.Psi.ruleset</CodeAnalysisRuleSet>
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
@@ -30,15 +30,15 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GtkSharp" Version="3.22.25.125" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Psi.Audio" Version="0.18.72.1-beta" />
-    <PackageReference Include="Microsoft.Psi.Audio.Linux" Version="0.18.72.1-beta" />
-    <PackageReference Include="Microsoft.Psi.Imaging" Version="0.18.72.1-beta" />
-    <PackageReference Include="Microsoft.Psi.Media.Linux" Version="0.18.72.1-beta" />
-    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.18.72.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Audio" Version="0.19.100.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Audio.Linux" Version="0.19.100.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Imaging" Version="0.19.100.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Media.Linux" Version="0.19.100.1-beta" />
+    <PackageReference Include="Microsoft.Psi.Runtime" Version="0.19.100.1-beta" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
